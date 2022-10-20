@@ -2,7 +2,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 
-const unauthorizedRedirectPath = "/login";
+const unauthorizedRedirectPath = "/api/auth/signin";
 
 interface UseUnauthorizedRedirectProps {
   active: boolean;
