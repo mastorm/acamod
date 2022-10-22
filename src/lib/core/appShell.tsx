@@ -1,5 +1,5 @@
 import { PropsWithChildren } from "react";
-import { useUnauthorizedRedirect } from "./protectedContent";
+import { useUnauthorizedRedirect } from "./useUnauthorizedRedirect";
 
 interface AppShellProps extends PropsWithChildren<unknown> {
   requireAuthentication?: boolean;

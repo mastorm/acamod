@@ -1,2 +1,2 @@
-export * from "./protectedContent";
+export * from "./useUnauthorizedRedirect";
 export * from "./appShell";
