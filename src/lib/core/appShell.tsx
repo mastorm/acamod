@@ -10,5 +10,5 @@ export function AppShell({
   requireAuthentication = true,
 }: AppShellProps) {
   useUnauthorizedRedirect({ active: requireAuthentication === true });
-  return <main>{children}</main>;
+  return <>{children}</>;
 }
