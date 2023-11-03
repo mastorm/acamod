@@ -3,7 +3,7 @@ import {signIn} from "@/lib/auth";
 export default function LoginPage() {
     const handleGoogleSignIn = async () => {
         "use server";
-        await signIn("google");
+        await signIn("google", {redirectTo: "/dashboard"});
     }
     return (
         <main className="flex items-center justify-center md:h-screen">
