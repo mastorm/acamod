@@ -6,13 +6,17 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "postinstall": "patch-package",
+    "migrate": "npx drizzle-kit generate:sqlite --schema lib/schema"
   },
   "dependencies": {
+    "@auth/drizzle-adapter": "^0.3.5",
     "@libsql/client": "^0.3.6",
     "drizzle-orm": "^0.28.6",
     "next": "14.0.1",
     "next-auth": "^5.0.0-beta.3",
+    "patch-package": "^8.0.0",
     "react": "^18",
     "react-dom": "^18",
     "zod": "^3.22.4"
