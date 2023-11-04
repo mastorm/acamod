@@ -1,0 +1,13 @@
+{
+  "version": "5",
+  "dialect": "pg",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1699095666262,
+      "tag": "0000_clean_yellow_claw",
+      "breakpoints": true
+    }
+  ]
+}
