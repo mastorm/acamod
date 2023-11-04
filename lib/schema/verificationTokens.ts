@@ -1,11 +1,11 @@
-import {integer, primaryKey, sqliteTable, text} from "drizzle-orm/sqlite-core";
+import {pgTable, primaryKey, text, timestamp} from "drizzle-orm/pg-core";
 
-export const verificationTokens = sqliteTable(
+export const verificationTokens = pgTable(
     "verificationToken",
     {
         identifier: text("identifier").notNull(),
         token: text("token").notNull(),
-        expires: integer("expires", { mode: "timestamp_ms" }).notNull(),
+        expires: timestamp("expires", { mode: "date" }).notNull(),
     },
     (vt) => ({
         compoundKey: primaryKey(vt.identifier, vt.token),

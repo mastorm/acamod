@@ -1,8 +1,8 @@
-import {integer, primaryKey, sqliteTable, text} from "drizzle-orm/sqlite-core";
+import {integer, pgTable, primaryKey, text} from "drizzle-orm/pg-core";
 import {AdapterAccount} from "@auth/core/adapters";
 import {users} from "./users";
 
-export const accounts = sqliteTable(
+export const accounts = pgTable(
     "account",
     {
         userId: text("userId")
