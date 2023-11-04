@@ -6,9 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "postinstall": "patch-package",
-    "migrate": "npx drizzle-kit generate:pg --schema lib/schema"
+    "lint": "next lint"
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^0.3.5",
