@@ -1,5 +1,3 @@
-"use client";
-
 import { SiteHeader } from "@/components/layout/site-header";
 import { PropsWithChildren } from "react";
 
