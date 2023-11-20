@@ -6,7 +6,7 @@ export default function UiLayout({ children }: PropsWithChildren) {
     <>
       <div className="relative flex min-h-screen flex-col">
         <SiteHeader />
-        <div className="flex-1 container pt-2">{children}</div>
+        <div className="flex-1 container pt-6">{children}</div>
       </div>
     </>
   );
