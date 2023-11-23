@@ -34,14 +34,14 @@ export function CreateNewModuleDialog({ children }: PropsWithChildren) {
   }
   return (
     <Dialog>
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)}>
-          <DialogTrigger asChild>{children}</DialogTrigger>
-          <DialogContent>
-            <DialogHeader>Neues Modul erstellen</DialogHeader>
-            <DialogDescription>
-              Bitte geben Sie den Namen des neuen Moduls ein:
-            </DialogDescription>
+      <DialogTrigger asChild>{children}</DialogTrigger>
+      <DialogContent>
+        <DialogHeader>Neues Modul erstellen</DialogHeader>
+        <DialogDescription>
+          Bitte geben Sie den Namen des neuen Moduls ein:
+        </DialogDescription>
+        <Form {...form}>
+          <form id="createModuleForm" onSubmit={form.handleSubmit(onSubmit)}>
             <FormField
               control={form.control}
               name="moduleName"
@@ -54,13 +54,14 @@ export function CreateNewModuleDialog({ children }: PropsWithChildren) {
                 </FormItem>
               )}
             ></FormField>
-
-            <DialogFooter>
-              <Button type="submit">Erstellen</Button>
-            </DialogFooter>
-          </DialogContent>
-        </form>
-      </Form>
+          </form>
+        </Form>
+        <DialogFooter>
+          <Button type="submit" form="createModuleForm">
+            Erstellen
+          </Button>
+        </DialogFooter>
+      </DialogContent>
     </Dialog>
   );
 }
