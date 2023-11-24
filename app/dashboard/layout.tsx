@@ -1,4 +1,5 @@
 import { SiteHeader } from "@/components/layout/site-header";
+import { Toaster } from "@/components/ui/toaster";
 import { PropsWithChildren } from "react";
 
 export default function UiLayout({ children }: PropsWithChildren) {
@@ -8,6 +9,7 @@ export default function UiLayout({ children }: PropsWithChildren) {
         <SiteHeader />
         <div className="flex-1 container pt-6">{children}</div>
       </div>
+      <Toaster />
     </>
   );
 }
