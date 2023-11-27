@@ -1,11 +1,12 @@
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { FolderPlus } from "lucide-react";
+import { PlusCircle } from "lucide-react";
 import { CreateNewModuleDialog } from "./create-new-module-dialog";
 import { db } from "@/lib/database";
 import { modules } from "@/lib/schema";
 import { revalidatePath } from "next/cache";
 import { createModuleSchema } from "./createModuleSchema";
 import { getSession } from "@/lib/getSession";
+import { Button } from "@/components/ui/button";
+import React from "react";
 
 export function CreateNewModuleCard() {
   async function createModule(moduleName: string) {
@@ -26,19 +27,11 @@ export function CreateNewModuleCard() {
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Neues Modul</CardTitle>
-      </CardHeader>
-
-      <CardContent>
-        <CreateNewModuleDialog onSave={createModule}>
-          <button className="p-8 hover:bg-secondary/90 w-full border rounded grid place-items-center">
-            <FolderPlus />
-            Neues Modul erstellen
-          </button>
-        </CreateNewModuleDialog>
-      </CardContent>
-    </Card>
+    <CreateNewModuleDialog onSave={createModule}>
+      <Button variant={"ghost"}>
+        <PlusCircle className="mr-2 h-4 w-4" />
+        Neues Modul erstellen
+      </Button>
+    </CreateNewModuleDialog>
   );
 }

@@ -14,13 +14,16 @@ export default async function Page() {
 
   return (
     <main>
-      <h1 className="text-2xl font-bold pb-6">Module</h1>
+      <div className="flex gap-4 items-center pb-6 ">
+        <h1 className="text-2xl font-bold">Module</h1>
+
+        <CreateNewModuleCard />
+      </div>
       {/* TODO: Show list of modules here*/}
       <div className="grid gap-8 grid-cols-1 md:grid-cols-2 xl:grid-cols-4">
         {userModules.map((x) => (
           <ModuleCard key={x.id} module={x} />
         ))}
-        <CreateNewModuleCard />
       </div>
     </main>
   );
