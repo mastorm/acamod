@@ -7,6 +7,8 @@ import { createModuleSchema } from "./createModuleSchema";
 import { getSession } from "@/lib/getSession";
 import { Button } from "@/components/ui/button";
 import React from "react";
+import { redirect } from "next/navigation";
+import { urls } from "@/lib/urls";
 
 export function CreateNewModuleCard() {
   async function createModule(moduleName: string) {
@@ -19,11 +21,13 @@ export function CreateNewModuleCard() {
       throw new Error("unauthorized!");
     }
 
-    await db
+    const result = await db
       .insert(modules)
-      .values({ name: payload.moduleName, userId: session.user.id });
+      .values({ name: payload.moduleName, userId: session.user.id })
+      .returning({ id: modules.id });
 
     revalidatePath("/dashboard");
+    redirect(urls.moduleDetails(result[0].id));
   }
 
   return (

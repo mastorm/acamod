@@ -24,5 +24,9 @@ export default async function ModuleDetailsPage({
   if (currentModule == null) {
     return notFound();
   }
-  return <div>{currentModule.name}</div>;
+  return (
+    <main>
+      <h1 className="text-2xl font-bold pb-6">{currentModule.name}</h1>
+    </main>
+  );
 }
