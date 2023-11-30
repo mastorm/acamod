@@ -14,7 +14,7 @@ export default async function Page() {
 
   return (
     <main>
-      <div className="flex gap-4 items-center pb-6 ">
+      <div className="flex gap-4 pb-6 ">
         <h1 className="text-2xl font-bold">Module</h1>
 
         <CreateNewModuleCard />
