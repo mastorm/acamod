@@ -30,12 +30,22 @@ import {
 interface CreateNewModuleDialogProps {
   onSave: (payload: ModuleSchema) => Promise<void>;
   defaultValues: ModuleSchema;
+  texts: {
+    title: string;
+    description: string;
+    saveButton: string;
+    toast: {
+      title: string;
+      description: string;
+    };
+  };
 }
 
 export function ModuleFormDialog({
   children,
   onSave,
   defaultValues,
+  texts,
 }: PropsWithChildren<CreateNewModuleDialogProps>) {
   const [busy, setBusy] = useState(false);
   const [open, setOpen] = useState(false);
@@ -50,8 +60,8 @@ export function ModuleFormDialog({
     await onSave(values);
 
     toast({
-      title: "Erfolgreich erstellt!",
-      description: "Das Modul wurde erfolgreich angelegt",
+      title: texts.toast.title,
+      description: texts.toast.description,
     });
     setBusy(false);
     //TODO: Navigate to created module when a detail page exists
@@ -61,10 +71,8 @@ export function ModuleFormDialog({
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent>
-        <DialogHeader>Neues Modul erstellen</DialogHeader>
-        <DialogDescription>
-          Bitte geben Sie den Namen des neuen Moduls ein:
-        </DialogDescription>
+        <DialogHeader>{texts.title}</DialogHeader>
+        <DialogDescription>{texts.description}</DialogDescription>
         <Form {...form}>
           <form id="createModuleForm" onSubmit={form.handleSubmit(onSubmit)}>
             <div className="grid gap-2">
@@ -114,7 +122,7 @@ export function ModuleFormDialog({
         </Form>
         <DialogFooter>
           <Button disabled={busy} type="submit" form="createModuleForm">
-            Erstellen
+            {texts.saveButton}
           </Button>
         </DialogFooter>
       </DialogContent>

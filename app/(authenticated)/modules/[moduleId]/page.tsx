@@ -4,9 +4,9 @@ import { getRequiredSession } from "@/lib/getSession";
 import { and, eq } from "drizzle-orm";
 import { notFound } from "next/navigation";
 import { DetailLayout } from "@/components/layout/detail-layout";
-import { Button } from "@/components/ui/button";
-import { CheckIcon, FlagIcon, SettingsIcon } from "lucide-react";
-import { PropsWithChildren } from "react";
+import { CheckIcon, FlagIcon } from "lucide-react";
+import { ActionButton } from "@/components/layout/action-button";
+import { EditModuleAction } from "@/app/(authenticated)/modules/[moduleId]/edit-module-action";
 
 interface ModuleDetailsPageProps {
   params: {
@@ -14,15 +14,15 @@ interface ModuleDetailsPageProps {
   };
 }
 
-function ActionButton({ children }: PropsWithChildren) {
-  return <Button variant="ghost">{children}</Button>;
-}
 export default async function ModuleDetailsPage({
   params: { moduleId },
 }: ModuleDetailsPageProps) {
   const session = await getRequiredSession();
   const currentModule = await db.query.modules.findFirst({
     columns: {
+      id: true,
+      shortCode: true,
+      credits: true,
       name: true,
     },
     where: and(eq(modules.userId, session.user.id), eq(modules.id, +moduleId)),
@@ -37,17 +37,22 @@ export default async function ModuleDetailsPage({
       actions={
         <>
           <ActionButton>
-            {/*Complete module*/}
+            {/*complete a module*/}
             <CheckIcon />
           </ActionButton>
           <ActionButton>
             {/*Set a deadline*/}
             <FlagIcon />
           </ActionButton>
-          <ActionButton>
-            {/*Edit module settings*/}
-            <SettingsIcon />
-          </ActionButton>
+
+          <EditModuleAction
+            moduleId={currentModule.id}
+            module={{
+              name: currentModule.name,
+              shortCode: currentModule.shortCode ?? "",
+              credits: currentModule.credits ?? 0,
+            }}
+          />
         </>
       }
     >

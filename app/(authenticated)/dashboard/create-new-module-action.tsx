@@ -46,6 +46,15 @@ export function CreateNewModuleAction() {
         name: "",
         shortCode: "",
       }}
+      texts={{
+        description: "Bitte geben Sie die Details für das neue Moduls ein:",
+        title: "Neues Modul erstellen",
+        saveButton: "Erstellen",
+        toast: {
+          title: "Erfolgreich erstellt!",
+          description: "Das Modul wurde erfolgreich angelegt",
+        },
+      }}
     >
       <Button variant={"ghost"}>
         <PlusCircle className="mr-2 h-4 w-4" />
