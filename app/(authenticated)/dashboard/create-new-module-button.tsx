@@ -3,17 +3,20 @@ import { CreateNewModuleDialog } from "./create-new-module-dialog";
 import { db } from "@/lib/database";
 import { modules } from "@/lib/schema";
 import { revalidatePath } from "next/cache";
-import { createModuleSchema } from "./createModuleSchema";
 import { getSession } from "@/lib/getSession";
 import { Button } from "@/components/ui/button";
 import React from "react";
 import { redirect } from "next/navigation";
 import { urls } from "@/lib/urls";
+import {
+  ModuleSchema,
+  moduleSchema,
+} from "@/app/(authenticated)/_shared/moduleSchema";
 
 export function CreateNewModuleButton() {
-  async function createModule(moduleName: string) {
+  async function createModule(data: ModuleSchema) {
     "use server";
-    const payload = createModuleSchema.parse({ moduleName });
+    const payload = moduleSchema.parse(data);
 
     const session = await getSession();
 
@@ -23,7 +26,12 @@ export function CreateNewModuleButton() {
 
     const result = await db
       .insert(modules)
-      .values({ name: payload.moduleName, userId: session.user.id })
+      .values({
+        name: payload.name,
+        shortCode: payload.shortCode == "" ? null : payload.shortCode,
+        credits: payload.credits == 0 ? null : payload.credits,
+        userId: session.user.id,
+      })
       .returning({ id: modules.id });
 
     revalidatePath("/dashboard");

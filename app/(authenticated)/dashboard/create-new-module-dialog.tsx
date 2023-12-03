@@ -21,11 +21,14 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { createModuleSchema } from "./createModuleSchema";
 import { useToast } from "@/components/ui/use-toast";
+import {
+  ModuleSchema,
+  moduleSchema,
+} from "@/app/(authenticated)/_shared/moduleSchema";
 
 interface CreateNewModuleDialogProps {
-  onSave: (moduleName: string) => Promise<void>;
+  onSave: (payload: ModuleSchema) => Promise<void>;
 }
 
 export function CreateNewModuleDialog({
@@ -35,16 +38,18 @@ export function CreateNewModuleDialog({
   const [busy, setBusy] = useState(false);
   const [open, setOpen] = useState(false);
   const { toast } = useToast();
-  const form = useForm<z.infer<typeof createModuleSchema>>({
-    resolver: zodResolver(createModuleSchema),
+  const form = useForm<ModuleSchema>({
+    resolver: zodResolver(moduleSchema),
     defaultValues: {
-      moduleName: "",
+      name: "",
+      credits: 0,
+      shortCode: "",
     },
   });
 
-  async function onSubmit(values: z.infer<typeof createModuleSchema>) {
+  async function onSubmit(values: ModuleSchema) {
     setBusy(true);
-    await onSave(values.moduleName);
+    await onSave(values);
 
     toast({
       title: "Erfolgreich erstellt!",
@@ -64,19 +69,49 @@ export function CreateNewModuleDialog({
         </DialogDescription>
         <Form {...form}>
           <form id="createModuleForm" onSubmit={form.handleSubmit(onSubmit)}>
-            <FormField
-              control={form.control}
-              name="moduleName"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Modulbezeichnung</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Mathematik I" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            ></FormField>
+            <div className="grid gap-2">
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Modulbezeichnung (*)</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Mathematik I" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <div className="grid grid-cols-2 gap-2">
+                <FormField
+                  control={form.control}
+                  name="shortCode"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Kürzel</FormLabel>
+                      <FormControl>
+                        <Input placeholder="IMT01" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="credits"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Credits</FormLabel>
+                      <FormControl>
+                        <Input type="number" placeholder="5" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </div>
           </form>
         </Form>
         <DialogFooter>
