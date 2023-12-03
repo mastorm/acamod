@@ -1,4 +1,4 @@
-import { pgTable, serial, text } from "drizzle-orm/pg-core";
+import { pgTable, serial, text, smallint } from "drizzle-orm/pg-core";
 import { users } from ".";
 
 export const modules = pgTable("modules", {
@@ -7,4 +7,6 @@ export const modules = pgTable("modules", {
     .notNull()
     .references(() => users.id),
   name: text("name").notNull(),
+  credits: smallint("credits"),
+  shortCode: text("shortCode"),
 });
