@@ -3,6 +3,10 @@ import { modules } from "@/lib/schema";
 import { getRequiredSession } from "@/lib/getSession";
 import { and, eq } from "drizzle-orm";
 import { notFound } from "next/navigation";
+import { DetailLayout } from "@/components/layout/detail-layout";
+import { Button } from "@/components/ui/button";
+import { CheckIcon, FlagIcon, SettingsIcon } from "lucide-react";
+import { PropsWithChildren } from "react";
 
 interface ModuleDetailsPageProps {
   params: {
@@ -10,6 +14,9 @@ interface ModuleDetailsPageProps {
   };
 }
 
+function ActionButton({ children }: PropsWithChildren) {
+  return <Button variant="ghost">{children}</Button>;
+}
 export default async function ModuleDetailsPage({
   params: { moduleId },
 }: ModuleDetailsPageProps) {
@@ -25,8 +32,26 @@ export default async function ModuleDetailsPage({
     return notFound();
   }
   return (
-    <main>
-      <h1 className="text-2xl font-bold pb-6">{currentModule.name}</h1>
-    </main>
+    <DetailLayout
+      title={currentModule.name}
+      actions={
+        <>
+          <ActionButton>
+            {/*Complete module*/}
+            <CheckIcon />
+          </ActionButton>
+          <ActionButton>
+            {/*Set a deadline*/}
+            <FlagIcon />
+          </ActionButton>
+          <ActionButton>
+            {/*Edit module settings*/}
+            <SettingsIcon />
+          </ActionButton>
+        </>
+      }
+    >
+      asd
+    </DetailLayout>
   );
 }
