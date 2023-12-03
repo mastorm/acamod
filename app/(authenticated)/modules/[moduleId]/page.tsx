@@ -4,9 +4,10 @@ import { getRequiredSession } from "@/lib/getSession";
 import { and, eq } from "drizzle-orm";
 import { notFound } from "next/navigation";
 import { DetailLayout } from "@/components/layout/detail-layout";
-import { CheckIcon, FlagIcon } from "lucide-react";
+import { CheckIcon, FlagIcon, PencilIcon } from "lucide-react";
 import { ActionButton } from "@/components/layout/action-button";
 import { EditModuleAction } from "@/app/(authenticated)/modules/[moduleId]/edit-module-action";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface ModuleDetailsPageProps {
   params: {
@@ -34,6 +35,7 @@ export default async function ModuleDetailsPage({
   return (
     <DetailLayout
       title={currentModule.name}
+      subtitle={`${currentModule.credits} credits`}
       actions={
         <>
           <ActionButton>
@@ -56,7 +58,14 @@ export default async function ModuleDetailsPage({
         </>
       }
     >
-      asd
+      <Tabs defaultValue="notes" className="w-[400px]">
+        <TabsList className="grid w-full grid-cols-2">
+          <TabsTrigger value="notes">Notizen</TabsTrigger>
+          <TabsTrigger value="files">Dateien</TabsTrigger>
+        </TabsList>
+        <TabsContent value="notes">Hier folgt ein Notizfeld</TabsContent>
+        <TabsContent value="files">Hier folgen Moduldateien</TabsContent>
+      </Tabs>
     </DetailLayout>
   );
 }
