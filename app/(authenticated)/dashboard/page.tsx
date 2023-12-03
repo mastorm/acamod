@@ -1,5 +1,5 @@
 import { db } from "@/lib/database";
-import { CreateNewModuleCard } from "./create-new-module-card";
+import { CreateNewModuleButton } from "./create-new-module-button";
 import { getRequiredSession } from "@/lib/getSession";
 import { modules } from "@/lib/schema";
 import { eq } from "drizzle-orm";
@@ -17,7 +17,7 @@ export default async function Page() {
       <div className="flex gap-4 pb-6 ">
         <h1 className="text-2xl font-bold">Module</h1>
 
-        <CreateNewModuleCard />
+        <CreateNewModuleButton />
       </div>
       {/* TODO: Show list of modules here*/}
       <div className="grid gap-8 grid-cols-1 md:grid-cols-2 xl:grid-cols-4">
