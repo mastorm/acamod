@@ -1,5 +1,5 @@
 import { PlusCircle } from "lucide-react";
-import { CreateNewModuleDialog } from "./create-new-module-dialog";
+import { ModuleFormDialog } from "../_shared/module-form-dialog";
 import { db } from "@/lib/database";
 import { modules } from "@/lib/schema";
 import { revalidatePath } from "next/cache";
@@ -13,7 +13,7 @@ import {
   moduleSchema,
 } from "@/app/(authenticated)/_shared/moduleSchema";
 
-export function CreateNewModuleButton() {
+export function CreateNewModuleAction() {
   async function createModule(data: ModuleSchema) {
     "use server";
     const payload = moduleSchema.parse(data);
@@ -39,11 +39,18 @@ export function CreateNewModuleButton() {
   }
 
   return (
-    <CreateNewModuleDialog onSave={createModule}>
+    <ModuleFormDialog
+      onSave={createModule}
+      defaultValues={{
+        credits: 0,
+        name: "",
+        shortCode: "",
+      }}
+    >
       <Button variant={"ghost"}>
         <PlusCircle className="mr-2 h-4 w-4" />
         Neues Modul erstellen
       </Button>
-    </CreateNewModuleDialog>
+    </ModuleFormDialog>
   );
 }

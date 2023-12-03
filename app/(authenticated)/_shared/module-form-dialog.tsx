@@ -29,22 +29,20 @@ import {
 
 interface CreateNewModuleDialogProps {
   onSave: (payload: ModuleSchema) => Promise<void>;
+  defaultValues: ModuleSchema;
 }
 
-export function CreateNewModuleDialog({
+export function ModuleFormDialog({
   children,
   onSave,
+  defaultValues,
 }: PropsWithChildren<CreateNewModuleDialogProps>) {
   const [busy, setBusy] = useState(false);
   const [open, setOpen] = useState(false);
   const { toast } = useToast();
   const form = useForm<ModuleSchema>({
     resolver: zodResolver(moduleSchema),
-    defaultValues: {
-      name: "",
-      credits: 0,
-      shortCode: "",
-    },
+    defaultValues,
   });
 
   async function onSubmit(values: ModuleSchema) {
