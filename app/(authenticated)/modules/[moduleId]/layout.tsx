@@ -1,23 +1,23 @@
-import { db } from "@/lib/database";
-import { modules } from "@/lib/schema";
+import { PropsWithChildren } from "react";
 import { getRequiredSession } from "@/lib/getSession";
+import { db } from "@/lib/database";
 import { and, eq } from "drizzle-orm";
+import { modules } from "@/lib/schema";
 import { notFound } from "next/navigation";
 import { DetailLayout } from "@/components/layout/detail-layout";
-import { CheckIcon, FlagIcon, PencilIcon } from "lucide-react";
 import { ActionButton } from "@/components/layout/action-button";
+import { CheckIcon, FlagIcon } from "lucide-react";
 import { EditModuleAction } from "@/app/(authenticated)/modules/[moduleId]/edit-module-action";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ModuleDetailsPageProps } from "@/app/(authenticated)/modules/[moduleId]/routeParams";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import Link from "next/link";
+import { urls } from "@/lib/urls";
+import ModuleTabs from "@/app/(authenticated)/modules/[moduleId]/module-tabs";
 
-interface ModuleDetailsPageProps {
-  params: {
-    moduleId: string;
-  };
-}
-
-export default async function ModuleDetailsPage({
+export default async function ModuleDetailLayout({
+  children,
   params: { moduleId },
-}: ModuleDetailsPageProps) {
+}: PropsWithChildren<ModuleDetailsPageProps>) {
   const session = await getRequiredSession();
   const currentModule = await db.query.modules.findFirst({
     columns: {
@@ -58,14 +58,10 @@ export default async function ModuleDetailsPage({
         </>
       }
     >
-      <Tabs defaultValue="notes" className="w-[400px]">
-        <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="notes">Notizen</TabsTrigger>
-          <TabsTrigger value="files">Dateien</TabsTrigger>
-        </TabsList>
-        <TabsContent value="notes">Hier folgt ein Notizfeld</TabsContent>
-        <TabsContent value="files">Hier folgen Moduldateien</TabsContent>
-      </Tabs>
+      <div className="flex pb-2">
+        <ModuleTabs moduleId={+moduleId} />
+      </div>
+      {children}
     </DetailLayout>
   );
 }
