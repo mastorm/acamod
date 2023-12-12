@@ -1,14 +1,15 @@
 "use client";
 
-import ReactQuill from "react-quill";
-import { useState } from "react";
-import "react-quill/dist/quill.snow.css";
+import React, { useState } from "react";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
 export function Editor() {
   const [note, setNote] = useState("");
+
   return (
-    <div>
-      {note}
-      <ReactQuill theme="snow" value={note} onChange={setNote}></ReactQuill>
+    <div className="grid gap-2">
+      <Textarea value={note} onChange={(e) => setNote(e.target.value)} />
+      <Button className="place-self-end">Speichern</Button>
     </div>
   );
 }

@@ -6,7 +6,6 @@ export default async function ModuleNotes({
 }: ModuleDetailsPageProps) {
   return (
     <main>
-      <h1>Notizen</h1>
       <Editor />
     </main>
   );
