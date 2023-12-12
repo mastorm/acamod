@@ -3,5 +3,9 @@ import { ModuleDetailsPageProps } from "@/app/(authenticated)/modules/[moduleId]
 export default async function ModuleNotes({
   params: { moduleId },
 }: ModuleDetailsPageProps) {
-  return <h1>Files</h1>;
+  return (
+    <main>
+      <h1>Files</h1>
+    </main>
+  );
 }
