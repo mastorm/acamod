@@ -7,6 +7,7 @@ import { DetailLayout } from "@/components/layout/detail-layout";
 import { PlusCircleIcon, UserIcon } from "lucide-react";
 import { ActionButton } from "@/components/layout/action-button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { EditGroupAction } from "@/app/(authenticated)/groups/[groupId]/edit-group-action";
 
 interface GroupDetailsPageProps {
   params: {
@@ -46,6 +47,14 @@ export default async function GroupDetailsPage({
             {/* Aktion, um Mitgliederliste anzuzeigen */}
             <UserIcon />
           </ActionButton>
+
+          <EditGroupAction
+            groupId={currentGroup.id}
+            group={{
+              name: currentGroup.name,
+              // Weitere Felder, falls vorhanden...
+            }}
+          />
           {/* Weitere Aktionen für Gruppen */}
         </>
       }
