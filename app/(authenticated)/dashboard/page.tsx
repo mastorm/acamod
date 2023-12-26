@@ -5,8 +5,8 @@ import { modules } from "@/lib/schema";
 import { groups } from "@/lib/schema/groups";
 import { eq } from "drizzle-orm";
 import { ModuleCard } from "@/app/(authenticated)/dashboard/module-card";
-import { CreateNewGroupCard } from "./create-new-group-card";
 import { GroupCard } from "./group-card";
+import { CreateNewGroupAction } from "@/app/(authenticated)/dashboard/create-new-group-action";
 
 export default async function Page() {
   const session = await getRequiredSession();
@@ -35,7 +35,7 @@ export default async function Page() {
 
       <div className="flex gap-4 pb-6 mt-8">
         <h2 className="text-2xl font-bold">Gruppen</h2>
-        <CreateNewGroupCard />
+        <CreateNewGroupAction />
       </div>
       {/* TODO: Show list of groups here*/}
       <div className="grid gap-8 grid-cols-1 md:grid-cols-2 xl:grid-cols-4">
