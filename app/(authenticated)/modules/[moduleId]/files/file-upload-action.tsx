@@ -23,29 +23,30 @@ export function FileUploadAction({
     if (session.user == null) {
       throw new Error("Unauthorized");
     }
-    revalidatePath(`/modules/${moduleId}/files`);
 
     const files = payload.getAll("files") as File[];
-    const ids = await db
-      .insert(attachments)
-      .values(
-        files.map((file) => ({
-          filename: file.name,
-          uploaderId: session.user.id,
-          moduleId: moduleId,
-          mimeType: file.type,
-          uploadedAt: new Date(),
-          size: file.size,
-        }))
-      )
-      .returning({ id: attachments.id });
 
-    for (var i = 0; i < ids.length; i++) {
-      const file = files[i];
-      await put(ids[i].id, file, {
+    const attachmentValues: (typeof attachments.$inferInsert)[] = [];
+
+    for (const file of files) {
+      const blob = await put(getAttachmentPath(moduleId, file.name), file, {
         access: "public",
       });
+      attachmentValues.push({
+        filename: file.name,
+        uploaderId: session.user.id,
+        moduleId: moduleId,
+        mimeType: file.type,
+        uploadedAt: new Date(),
+        blobUrl: blob.url,
+        size: file.size,
+      });
     }
+    await db.insert(attachments).values(attachmentValues);
+    revalidatePath(`/modules/${moduleId}/files`);
   }
   return <FileUploadDialog onSave={uploadFiles}>{children}</FileUploadDialog>;
+}
+function getAttachmentPath(moduleId: number, name: string): string {
+  return `modules/${moduleId}/${name}`;
 }

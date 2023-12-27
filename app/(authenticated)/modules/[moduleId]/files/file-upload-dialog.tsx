@@ -82,6 +82,7 @@ export function FileUploadDialog({
                     <Input
                       type="file"
                       multiple
+                      required={true}
                       placeholder="Mathematik I"
                       onChange={(e) =>
                         field.onChange(

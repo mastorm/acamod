@@ -1,0 +1,1 @@
+ALTER TABLE "attachments" ADD COLUMN "blobUrl" text NOT NULL;
