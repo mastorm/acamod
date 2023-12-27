@@ -12,7 +12,7 @@ function NoFiles() {
       <FileUpIcon className="w-12 h-12" />
       <span className="max-w-sm text-center">
         Zu diesem Modul wurden noch keine Dateien hochgeladen. Um eine Datei
-        hochzuladen, zieh Sie bitte einfach per drag & drop in dieses Feld.
+        hochzuladen, klicke bitte auf den Upload-Button oben rechts.
       </span>
     </div>
   );
