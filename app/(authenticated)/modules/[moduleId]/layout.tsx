@@ -9,9 +9,6 @@ import { ActionButton } from "@/components/layout/action-button";
 import { CheckIcon, FlagIcon } from "lucide-react";
 import { EditModuleAction } from "@/app/(authenticated)/modules/[moduleId]/edit-module-action";
 import { ModuleDetailsPageProps } from "@/app/(authenticated)/modules/[moduleId]/routeParams";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import Link from "next/link";
-import { urls } from "@/lib/urls";
 import ModuleTabs from "@/app/(authenticated)/modules/[moduleId]/module-tabs";
 
 export default async function ModuleDetailLayout({

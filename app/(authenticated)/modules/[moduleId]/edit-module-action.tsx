@@ -35,7 +35,7 @@ export function EditModuleAction({ module, moduleId }: EditModuleActionProps) {
         credits: updatedModule.credits == 0 ? null : updatedModule.credits,
       })
       .where(
-        and(eq(modules.id, moduleId), eq(modules.userId, session.user.id)),
+        and(eq(modules.id, moduleId), eq(modules.userId, session.user.id))
       );
 
     revalidatePath(urls.moduleDetails(moduleId));
@@ -56,7 +56,6 @@ export function EditModuleAction({ module, moduleId }: EditModuleActionProps) {
       onSave={updateModule}
     >
       <ActionButton>
-        {/*Edit module settings*/}
         <SettingsIcon />
       </ActionButton>
     </ModuleFormDialog>
