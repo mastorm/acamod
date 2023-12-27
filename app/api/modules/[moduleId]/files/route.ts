@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { getRequiredSession } from "@/lib/getSession";
 import { db } from "@/lib/database";
 import { attachments } from "@/lib/schema";
+import { revalidatePath } from "next/cache";
 
 export async function POST(
   request: Request,
@@ -24,6 +25,7 @@ export async function POST(
   if (session.user == null) {
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
   }
+  revalidatePath(`/modules/${context.params.moduleId}/files`);
 
   const [{ id }] = await db
     .insert(attachments)
