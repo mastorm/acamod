@@ -10,7 +10,6 @@ import {
 } from "@/components/ui/dialog";
 import { PropsWithChildren, useState } from "react";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Form,
@@ -21,37 +20,49 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { createGroupSchema } from "./createGroupSchema";
 import { useToast } from "@/components/ui/use-toast";
+import {
+  GroupSchema,
+  groupSchema,
+} from "@/app/(authenticated)/_shared/groupSchema";
 
-interface CreateNewGroupDialogProps {
-  onSave: (groupName: string) => Promise<void>;
+interface GroupFormDialogProps {
+  onSave: (payload: GroupSchema) => Promise<void>;
+  defaultValues: GroupSchema;
+  texts: {
+    title: string;
+    description: string;
+    saveButton: string;
+    toast: {
+      title: string;
+      description: string;
+    };
+  };
 }
 
-export function CreateNewGroupDialog({
+export function GroupFormDialog({
   children,
   onSave,
-}: PropsWithChildren<CreateNewGroupDialogProps>) {
+  defaultValues,
+  texts,
+}: PropsWithChildren<GroupFormDialogProps>) {
   const [busy, setBusy] = useState(false);
   const [open, setOpen] = useState(false);
   const { toast } = useToast();
-  const form = useForm<z.infer<typeof createGroupSchema>>({
-    resolver: zodResolver(createGroupSchema),
-    defaultValues: {
-      groupName: "",
-    },
+  const form = useForm<GroupSchema>({
+    resolver: zodResolver(groupSchema),
+    defaultValues,
   });
 
-  async function onSubmit(values: z.infer<typeof createGroupSchema>) {
+  async function onSubmit(values: GroupSchema) {
     setBusy(true);
-    await onSave(values.groupName);
+    await onSave(values);
 
     toast({
-      title: "Erfolgreich erstellt!",
-      description: "Die Gruppe wurde erfolgreich angelegt",
+      title: texts.toast.title,
+      description: texts.toast.description,
     });
     setBusy(false);
-    //TODO: Navigate to created group when a detail page exists
     setOpen(false);
   }
 
@@ -59,30 +70,28 @@ export function CreateNewGroupDialog({
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent>
-        <DialogHeader>Neue Gruppe erstellen</DialogHeader>
-        <DialogDescription>
-          Bitte geben Sie den Namen der neuen Gruppe ein:
-        </DialogDescription>
+        <DialogHeader>{texts.title}</DialogHeader>
+        <DialogDescription>{texts.description}</DialogDescription>
         <Form {...form}>
           <form id="createGroupForm" onSubmit={form.handleSubmit(onSubmit)}>
             <FormField
               control={form.control}
-              name="groupName"
+              name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Gruppenbezeichnung</FormLabel>
+                  <FormLabel>Gruppenbezeichnung (*)</FormLabel>
                   <FormControl>
-                    <Input placeholder="Gruppe A" {...field} />
+                    <Input placeholder="Gruppenname" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
-            ></FormField>
+            />
           </form>
         </Form>
         <DialogFooter>
           <Button disabled={busy} type="submit" form="createGroupForm">
-            Erstellen
+            {texts.saveButton}
           </Button>
         </DialogFooter>
       </DialogContent>
