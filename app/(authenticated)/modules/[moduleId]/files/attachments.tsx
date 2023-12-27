@@ -1,6 +1,5 @@
 import { attachments } from "@/lib/schema";
 import { FileUpIcon } from "lucide-react";
-import { Dropzone } from "./dropzone";
 import { Attachment } from "./attachment";
 interface AttachmentsProps {
   moduleId: number;
@@ -21,15 +20,13 @@ function NoFiles() {
 
 export function Attachments({ moduleId, attachments }: AttachmentsProps) {
   return (
-    <Dropzone moduleId={moduleId}>
-      <div className="border rounded p-8">
-        {attachments.length == 0 && <NoFiles />}
-        <div className="divide-y">
-          {attachments.map((x) => (
-            <Attachment key={x.id} attachment={x} />
-          ))}
-        </div>
+    <div className="border rounded p-8">
+      {attachments.length == 0 && <NoFiles />}
+      <div className="divide-y">
+        {attachments.map((x) => (
+          <Attachment key={x.id} attachment={x} />
+        ))}
       </div>
-    </Dropzone>
+    </div>
   );
 }
