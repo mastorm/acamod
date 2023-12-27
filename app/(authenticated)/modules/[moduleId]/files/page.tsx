@@ -6,6 +6,7 @@ import { eq } from "drizzle-orm";
 import { attachments } from "@/lib/schema";
 import { Button } from "@/components/ui/button";
 import { UploadCloudIcon } from "lucide-react";
+import { FileUploadAction } from "./file-upload-action";
 
 export default async function ModuleNotes({
   params: { moduleId },
@@ -18,9 +19,11 @@ export default async function ModuleNotes({
     <main className="pt-2">
       <div className="flex justify-between">
         <h1 className="text-2xl pb-4">Dateien</h1>
-        <Button variant="outline">
-          <UploadCloudIcon className="mr-2" /> Datei hochladen
-        </Button>
+        <FileUploadAction moduleId={+moduleId}>
+          <Button variant="outline">
+            <UploadCloudIcon className="mr-2" /> Datei hochladen
+          </Button>
+        </FileUploadAction>
       </div>
 
       <Attachments moduleId={+moduleId} attachments={moduleAttachments} />
