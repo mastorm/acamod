@@ -1,6 +1,7 @@
 import { attachments } from "@/lib/schema";
 import { FileUpIcon } from "lucide-react";
 import { Dropzone } from "./dropzone";
+import { Attachment } from "./attachment";
 interface AttachmentsProps {
   moduleId: number;
   attachments: (typeof attachments.$inferSelect)[];
@@ -23,9 +24,11 @@ export function Attachments({ moduleId, attachments }: AttachmentsProps) {
     <Dropzone moduleId={moduleId}>
       <div className="border rounded p-8">
         {attachments.length == 0 && <NoFiles />}
-        {attachments.map((x) => (
-          <span key={x.id}>{x.filename}</span>
-        ))}
+        <div className="divide-y">
+          {attachments.map((x) => (
+            <Attachment key={x.id} attachment={x} />
+          ))}
+        </div>
       </div>
     </Dropzone>
   );
