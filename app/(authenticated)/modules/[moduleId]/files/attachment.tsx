@@ -7,7 +7,10 @@ interface AttachmentProps {
 
 export function Attachment({ attachment }: AttachmentProps) {
   return (
-    <div className="p-2 flex gap-2">
+    <a
+      href={attachment.blobUrl}
+      className="p-2 flex gap-2 hover:bg-primary-foreground"
+    >
       <div className="flex flex-1 gap-2">
         <FileIcon />
         {attachment.filename}
@@ -15,6 +18,6 @@ export function Attachment({ attachment }: AttachmentProps) {
       <div className="flex-end font-thin">
         hochgeladen am {attachment.uploadedAt.toLocaleDateString()}
       </div>
-    </div>
+    </a>
   );
 }
