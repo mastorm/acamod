@@ -36,7 +36,9 @@ export default async function ModuleDetailLayout({
   return (
     <DetailLayout
       title={currentModule.name}
-      subtitle={`${currentModule.credits} credits`}
+      subtitle={
+        currentModule.credits ? `${currentModule.credits} Credits` : undefined
+      }
       actions={
         <>
           <ActionButton>
