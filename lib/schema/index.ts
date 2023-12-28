@@ -6,3 +6,4 @@ export * from "./verificationTokens";
 export * from "./groups";
 export * from "./notes";
 export * from "./attachments";
+export * from "./goals";
