@@ -1,6 +1,5 @@
 import { PropsWithChildren } from "react";
 import { FileUploadDialog } from "./file-upload-dialog";
-import { FileUploadSchema, fileUploadSchema } from "./fileUploadSchema";
 import { getRequiredSession } from "@/lib/getSession";
 import { revalidatePath } from "next/cache";
 import { db } from "@/lib/database";
