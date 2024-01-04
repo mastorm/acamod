@@ -1,9 +1,9 @@
 import { db } from "@/lib/database";
 import { CreateNewModuleAction } from "./create-new-module-action";
 import { getRequiredSession } from "@/lib/getSession";
-import { modules } from "@/lib/schema";
+import { goals, modules } from "@/lib/schema";
 import { groups } from "@/lib/schema/groups";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { ModuleCard } from "@/app/(authenticated)/dashboard/module-card";
 import { GroupCard } from "./group-card";
 import { CreateNewGroupAction } from "@/app/(authenticated)/dashboard/create-new-group-action";
@@ -13,7 +13,8 @@ export default async function Page() {
   const userModules = await db
     .select()
     .from(modules)
-    .where(eq(modules.userId, session?.user.id));
+    .where(eq(modules.userId, session?.user.id))
+    .leftJoin(goals, eq(modules.id, goals.moduleId));
 
   const userGroups = await db
     .select()
@@ -29,7 +30,7 @@ export default async function Page() {
       {/* TODO: Show list of modules here*/}
       <div className="grid gap-8 grid-cols-1 md:grid-cols-2 xl:grid-cols-4">
         {userModules.map((x) => (
-          <ModuleCard key={x.id} module={x} />
+          <ModuleCard key={x.id} module={x.modules} goal={x.goals} />
         ))}
       </div>
 
