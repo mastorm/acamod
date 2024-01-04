@@ -5,14 +5,13 @@ import { db } from "../database";
 import { cache } from "react";
 
 export const getExistingGoal = cache(async function getExistingGoal(
-  moduleId: number
+  moduleId: number,
 ) {
   const session = await getRequiredSession();
-  const currentGoal = await db.query.goals.findFirst({
+  return db.query.goals.findFirst({
     where: and(
       eq(goals.userId, session.user.id),
-      eq(goals.moduleId, +moduleId)
+      eq(goals.moduleId, +moduleId),
     ),
   });
-  return currentGoal;
 });
