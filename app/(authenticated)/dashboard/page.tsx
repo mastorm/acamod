@@ -30,7 +30,7 @@ export default async function Page() {
       {/* TODO: Show list of modules here*/}
       <div className="grid gap-8 grid-cols-1 md:grid-cols-2 xl:grid-cols-4">
         {userModules.map((x) => (
-          <ModuleCard key={x.id} module={x.modules} goal={x.goals} />
+          <ModuleCard key={x.modules.id} module={x.modules} goals={x.goals} />
         ))}
       </div>
 
