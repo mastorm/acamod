@@ -9,8 +9,8 @@ import {
 import { users } from "./users";
 import { modules } from "./modules";
 
-export const goals = pgTable(
-  "goals",
+export const moduleUsage = pgTable(
+  "moduleUsage",
   {
     id: serial("id").primaryKey(),
     userId: text("userId")
@@ -19,7 +19,9 @@ export const goals = pgTable(
     moduleId: integer("moduleId")
       .references(() => modules.id)
       .notNull(),
-    targetDate: timestamp("targetDate").notNull(),
+    completedDate: timestamp("completedDate"),
+    note: text("note"),
+    targetDate: timestamp("targetDate"),
   },
   (t) => ({ userModule: uniqueIndex().on(t.userId, t.moduleId) })
 );
