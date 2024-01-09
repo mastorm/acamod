@@ -2,35 +2,35 @@ import { ModuleDetailsPageProps } from "@/app/(authenticated)/modules/[moduleId]
 import { Editor } from "@/app/(authenticated)/modules/[moduleId]/notes/editor";
 import { getRequiredSession } from "@/lib/getSession";
 import { db } from "@/lib/database";
-import { notes } from "@/lib/schema";
 import { and, eq } from "drizzle-orm";
+import { findModuleUsage } from "@/lib/data/moduleUsages";
+import { moduleUsage } from "@/lib/schema";
 
 export default async function ModuleNotes({
   params: { moduleId },
 }: ModuleDetailsPageProps) {
   const session = await getRequiredSession();
-  const currentNote = await db.query.notes.findFirst({
-    where: and(
-      eq(notes.moduleId, +moduleId),
-      eq(notes.userId, session.user.id),
-    ),
+  const usage = await findModuleUsage({
+    moduleId: +moduleId,
+    userId: session.user.id,
   });
 
   async function updateNote(moduleId: number, note: string) {
     "use server";
     const session = await getRequiredSession();
     const userId = session.user.id;
-    const existing = await db.query.notes.findFirst({
-      where: and(eq(notes.moduleId, +moduleId), eq(notes.userId, userId)),
+    const existing = await findModuleUsage({
+      moduleId: +moduleId,
+      userId: session.user.id,
     });
 
     if (existing == null) {
-      await db.insert(notes).values({ note, moduleId, userId: userId });
+      await db.insert(moduleUsage).values({ note, moduleId, userId: userId });
     } else {
       await db
-        .update(notes)
+        .update(moduleUsage)
         .set({ note })
-        .where(and(eq(notes.moduleId, +moduleId), eq(notes.userId, userId)));
+        .where(eq(moduleUsage.moduleId, moduleId));
     }
   }
 
@@ -38,7 +38,7 @@ export default async function ModuleNotes({
     <main>
       <Editor
         moduleId={+moduleId}
-        initial={currentNote?.note ?? ""}
+        initial={usage?.note ?? ""}
         onNoteChange={updateNote}
       />
     </main>

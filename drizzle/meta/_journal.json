@@ -64,6 +64,20 @@
       "when": 1703756092745,
       "tag": "0008_spicy_falcon",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "5",
+      "when": 1704707414781,
+      "tag": "0009_faulty_tomorrow_man",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "5",
+      "when": 1704730309038,
+      "tag": "0010_yummy_onslaught",
+      "breakpoints": true
     }
   ]
 }
