@@ -16,6 +16,9 @@ export const authConfig = {
   pages: {
     signIn: '/login',
   },
+  session: {
+    strategy: "database",
+  },
   adapter: DrizzleAdapter(db),
   callbacks: {
     authorized({ auth, request: { nextUrl } }) {
@@ -35,9 +38,9 @@ export const authConfig = {
       }
       return token
     },
-    session({ session, user }) {
-      if (session.user) {
-        session.user.id = user.id
+    session({ session, ...rest }) {
+      if (session.user && "user" in rest) {
+        session.user.id = rest.user.id
       }
       return session;
     },
