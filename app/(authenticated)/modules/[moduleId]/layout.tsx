@@ -11,7 +11,7 @@ import { EditModuleAction } from "@/app/(authenticated)/modules/[moduleId]/edit-
 import { ModuleDetailsPageProps } from "@/app/(authenticated)/modules/[moduleId]/routeParams";
 import ModuleTabs from "@/app/(authenticated)/modules/[moduleId]/module-tabs";
 import { SetGoalAction } from "./(goals)/set-goal-action";
-import { getExistingGoal } from "@/lib/data/goals";
+import { findModuleUsage } from "@/lib/data/moduleUsages";
 
 export default async function ModuleDetailLayout({
   children,
@@ -28,7 +28,10 @@ export default async function ModuleDetailLayout({
     where: and(eq(modules.userId, session.user.id), eq(modules.id, +moduleId)),
   });
 
-  const currentGoal = await getExistingGoal(+moduleId);
+  const currentGoal = await findModuleUsage({
+    moduleId: +moduleId,
+    userId: session.user.id,
+  });
 
   if (currentModule == null) {
     return notFound();
@@ -64,7 +67,7 @@ export default async function ModuleDetailLayout({
       }
     >
       <div className="flex flex-col gap-4 items-baseline">
-        {currentGoal && (
+        {currentGoal?.targetDate && (
           <div className=" border-teal-500 border p-4 items-center rounded">
             <h2 className="pb-2 text-2xl font-bold flex gap-4 items-center">
               <FlagIcon />
