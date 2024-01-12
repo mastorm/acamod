@@ -1,5 +1,5 @@
 import { pgTable, serial, text, smallint } from "drizzle-orm/pg-core";
-import { users } from ".";
+import { users } from "./users";
 
 export const modules = pgTable("modules", {
   id: serial("id").primaryKey(),

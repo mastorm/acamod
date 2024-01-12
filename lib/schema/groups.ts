@@ -1,5 +1,5 @@
 import { index, pgTable, serial, text } from "drizzle-orm/pg-core";
-import { users } from ".";
+import { users } from "./users";
 
 export const groups = pgTable(
   "groups",
@@ -11,6 +11,6 @@ export const groups = pgTable(
     name: text("name").notNull(),
   },
   (t) => ({
-    idxUser: index("qweasdqweqw").on(t.userId),
+    idxUser: index().on(t.userId),
   })
 );
