@@ -12,6 +12,7 @@ import { ModuleDetailsPageProps } from "@/app/(authenticated)/modules/[moduleId]
 import ModuleTabs from "@/app/(authenticated)/modules/[moduleId]/module-tabs";
 import { SetGoalAction } from "./(goals)/set-goal-action";
 import { findModuleUsage } from "@/lib/data/moduleUsages";
+import { CompleteModuleAction } from "./(completeModule)/complete-module-action";
 
 export default async function ModuleDetailLayout({
   children,
@@ -28,7 +29,7 @@ export default async function ModuleDetailLayout({
     where: and(eq(modules.userId, session.user.id), eq(modules.id, +moduleId)),
   });
 
-  const currentGoal = await findModuleUsage({
+  const moduleUsage = await findModuleUsage({
     moduleId: +moduleId,
     userId: session.user.id,
   });
@@ -44,10 +45,13 @@ export default async function ModuleDetailLayout({
       }
       actions={
         <>
-          <ActionButton>
-            {/*complete a module*/}
-            <CheckIcon />
-          </ActionButton>
+          <CompleteModuleAction moduleId={currentModule.id}>
+            <ActionButton>
+              {/*complete a module*/}
+              <CheckIcon />
+            </ActionButton>
+          </CompleteModuleAction>
+
           <SetGoalAction moduleId={currentModule.id}>
             <ActionButton>
               {/*Set a deadline*/}
@@ -67,7 +71,7 @@ export default async function ModuleDetailLayout({
       }
     >
       <div className="flex flex-col gap-4 items-baseline">
-        {currentGoal?.targetDate && (
+        {moduleUsage?.targetDate && !moduleUsage?.completedDate && (
           <div className=" border-teal-500 border p-4 items-center rounded">
             <h2 className="pb-2 text-2xl font-bold flex gap-4 items-center">
               <FlagIcon />
@@ -75,8 +79,21 @@ export default async function ModuleDetailLayout({
             </h2>
             <p>
               Dein Ziel ist es, das Modul bis zum{" "}
-              <strong>{currentGoal.targetDate.toLocaleDateString()}</strong>{" "}
+              <strong>{moduleUsage.targetDate.toLocaleDateString()}</strong>{" "}
               abzuschließen.
+            </p>
+          </div>
+        )}
+        {moduleUsage?.completedDate && (
+          <div className=" border-teal-500 border p-4 items-center rounded">
+            <h2 className="pb-2 text-2xl font-bold flex gap-4 items-center">
+              <FlagIcon />
+              Modulziel
+            </h2>
+            <p>
+              Du hast dieses Modul am{" "}
+              <strong>{moduleUsage.completedDate.toLocaleDateString()}</strong>{" "}
+              abgeschlossen.
             </p>
           </div>
         )}
