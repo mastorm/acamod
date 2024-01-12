@@ -7,10 +7,10 @@ export const groups = pgTable(
     id: serial("id").primaryKey(),
     userId: text("userId")
       .notNull()
-      .references(() => users.id), // Annahme, dass jede Gruppe einem Benutzer zugeordnet ist
+      .references(() => users.id),
     name: text("name").notNull(),
   },
   (t) => ({
-    idxUser: index().on(t.userId),
+    idxUser: index("qweasdqweqw").on(t.userId),
   })
 );
