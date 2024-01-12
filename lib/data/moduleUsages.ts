@@ -9,7 +9,7 @@ type ModuleUsageParams = { moduleId: number; userId: string };
 export const findModuleUsage = cache(async function (
   params: ModuleUsageParams
 ) {
-  return db.query.moduleUsage.findFirst({
+  return db.query.moduleUsages.findFirst({
     where: and(
       eq(moduleUsages.userId, moduleUsages.userId),
       eq(moduleUsages.moduleId, params.moduleId)
