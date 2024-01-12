@@ -33,7 +33,7 @@ export default async function Page() {
           <ModuleCard
             key={x.modules.id}
             module={x.modules}
-            moduleUsage={x.moduleUsage}
+            moduleUsage={x.moduleUsages}
           />
         ))}
       </div>
