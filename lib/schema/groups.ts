@@ -1,5 +1,5 @@
 import { index, pgTable, serial, text } from "drizzle-orm/pg-core";
-import { users } from ".";
+import { users } from "./users";
 
 export const groups = pgTable(
   "groups",
@@ -7,7 +7,7 @@ export const groups = pgTable(
     id: serial("id").primaryKey(),
     userId: text("userId")
       .notNull()
-      .references(() => users.id), // Annahme, dass jede Gruppe einem Benutzer zugeordnet ist
+      .references(() => users.id),
     name: text("name").notNull(),
   },
   (t) => ({
