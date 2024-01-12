@@ -7,14 +7,14 @@ import {
 } from "@/components/ui/card";
 import Link from "next/link";
 import { urls } from "@/lib/urls";
-import { moduleUsage } from "@/lib/schema";
+import { moduleUsages } from "@/lib/schema";
 
 interface ModuleCardProps {
   module: {
     id: number;
     name: string;
   };
-  moduleUsage: Pick<typeof moduleUsage.$inferSelect, "targetDate"> | null;
+  moduleUsage: Pick<typeof moduleUsages.$inferSelect, "targetDate"> | null;
 }
 
 export function ModuleCard({ module: { id, name } }: ModuleCardProps) {

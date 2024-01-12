@@ -5,7 +5,7 @@ import { db } from "@/lib/database";
 import { CompleteModuleDialog } from "./complete-module-dialog";
 import { format } from "date-fns";
 import { findModuleUsage } from "@/lib/data/moduleUsages";
-import { moduleUsage } from "@/lib/schema";
+import { moduleUsages } from "@/lib/schema";
 
 interface FileUploadActionProps {
   moduleId: number;
@@ -34,13 +34,13 @@ export async function CompleteModuleAction({
       userId: session.user.id,
     });
     if (currentGoal == null) {
-      await db.insert(moduleUsage).values({
+      await db.insert(moduleUsages).values({
         moduleId: moduleId,
         completedDate: new Date(),
         userId: session.user.id,
       });
     } else {
-      await db.update(moduleUsage).set({
+      await db.update(moduleUsages).set({
         completedDate: new Date(),
       });
     }

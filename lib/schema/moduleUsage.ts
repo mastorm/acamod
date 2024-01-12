@@ -9,8 +9,8 @@ import {
 import { users } from "./users";
 import { modules } from "./modules";
 
-export const moduleUsage = pgTable(
-  "moduleUsage",
+export const moduleUsages = pgTable(
+  "moduleUsages",
   {
     id: serial("id").primaryKey(),
     userId: text("userId")

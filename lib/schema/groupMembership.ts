@@ -9,8 +9,8 @@ import {
 import { users } from "./users";
 import { groups } from ".";
 
-export const groupMembership = pgTable(
-  "groupMembership",
+export const groupMemberships = pgTable(
+  "groupMemberships",
   {
     id: serial("id").primaryKey(),
     userId: text("userId")

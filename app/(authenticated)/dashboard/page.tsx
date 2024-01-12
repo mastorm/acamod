@@ -1,7 +1,7 @@
 import { db } from "@/lib/database";
 import { CreateNewModuleAction } from "./create-new-module-action";
 import { getRequiredSession } from "@/lib/getSession";
-import { moduleUsage, modules } from "@/lib/schema";
+import { moduleUsages, modules } from "@/lib/schema";
 import { groups } from "@/lib/schema/groups";
 import { eq } from "drizzle-orm";
 import { ModuleCard } from "@/app/(authenticated)/dashboard/module-card";
@@ -14,7 +14,7 @@ export default async function Page() {
     .select()
     .from(modules)
     .where(eq(modules.userId, session?.user.id))
-    .leftJoin(moduleUsage, eq(modules.id, moduleUsage.moduleId));
+    .leftJoin(moduleUsages, eq(modules.id, moduleUsages.moduleId));
 
   const userGroups = await db
     .select()
