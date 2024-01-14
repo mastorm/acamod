@@ -1,26 +1,23 @@
 import { db } from "@/lib/database";
 import { CreateNewModuleAction } from "./create-new-module-action";
 import { getRequiredSession } from "@/lib/getSession";
-import { moduleUsage, modules } from "@/lib/schema";
+import { moduleUsages, modules } from "@/lib/schema";
 import { groups } from "@/lib/schema/groups";
 import { eq } from "drizzle-orm";
 import { ModuleCard } from "@/app/(authenticated)/dashboard/module-card";
 import { GroupCard } from "./group-card";
 import { CreateNewGroupAction } from "@/app/(authenticated)/dashboard/create-new-group-action";
+import { getGroupsOfUser } from "@/lib/data/groups";
 
 export default async function Page() {
   const session = await getRequiredSession();
   const userModules = await db
     .select()
     .from(modules)
-    .where(eq(modules.userId, session?.user.id))
-    .leftJoin(moduleUsage, eq(modules.id, moduleUsage.moduleId));
+    .where(eq(modules.userId, session.user.id))
+    .leftJoin(moduleUsages, eq(modules.id, moduleUsages.moduleId));
 
-  const userGroups = await db
-    .select()
-    .from(groups)
-    .where(eq(groups.userId, session?.user.id));
-
+  const groups = await getGroupsOfUser(session.user.id);
   return (
     <main>
       <div className="flex gap-4 pb-6 ">
@@ -33,7 +30,7 @@ export default async function Page() {
           <ModuleCard
             key={x.modules.id}
             module={x.modules}
-            moduleUsage={x.moduleUsage}
+            moduleUsage={x.moduleUsages}
           />
         ))}
       </div>
@@ -44,7 +41,7 @@ export default async function Page() {
       </div>
       {/* TODO: Show list of groups here*/}
       <div className="grid gap-8 grid-cols-1 md:grid-cols-2 xl:grid-cols-4">
-        {userGroups.map((group) => (
+        {groups.map((group) => (
           <GroupCard key={group.id} group={group} />
         ))}
       </div>

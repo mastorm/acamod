@@ -6,7 +6,7 @@ import { SetGoalDialog } from "./set-goal-dialog";
 import { GoalSchema, goalSchema } from "./goalSchema";
 import { format } from "date-fns";
 import { findModuleUsage } from "@/lib/data/moduleUsages";
-import { moduleUsage } from "@/lib/schema";
+import { moduleUsages } from "@/lib/schema";
 
 interface FileUploadActionProps {
   moduleId: number;
@@ -36,13 +36,13 @@ export async function SetGoalAction({
       userId: session.user.id,
     });
     if (currentGoal == null) {
-      await db.insert(moduleUsage).values({
+      await db.insert(moduleUsages).values({
         moduleId: moduleId,
         targetDate: new Date(payload.targetDate!),
         userId: session.user.id,
       });
     } else {
-      await db.update(moduleUsage).set({
+      await db.update(moduleUsages).set({
         targetDate: new Date(payload.targetDate!),
       });
     }

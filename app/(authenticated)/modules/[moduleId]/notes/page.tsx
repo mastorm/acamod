@@ -4,7 +4,7 @@ import { getRequiredSession } from "@/lib/getSession";
 import { db } from "@/lib/database";
 import { and, eq } from "drizzle-orm";
 import { findModuleUsage } from "@/lib/data/moduleUsages";
-import { moduleUsage } from "@/lib/schema";
+import { moduleUsages } from "@/lib/schema";
 
 export default async function ModuleNotes({
   params: { moduleId },
@@ -25,12 +25,12 @@ export default async function ModuleNotes({
     });
 
     if (existing == null) {
-      await db.insert(moduleUsage).values({ note, moduleId, userId: userId });
+      await db.insert(moduleUsages).values({ note, moduleId, userId: userId });
     } else {
       await db
-        .update(moduleUsage)
+        .update(moduleUsages)
         .set({ note })
-        .where(eq(moduleUsage.moduleId, moduleId));
+        .where(eq(moduleUsages.moduleId, moduleId));
     }
   }
 
