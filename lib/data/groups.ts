@@ -31,3 +31,31 @@ export async function getGroupMembers({ groupId }: { groupId: number }) {
     ...members.map((x) => ({ ...x, isOwner: false })),
   ];
 }
+
+export async function getGroupsOfUser(userId: string) {
+  const loadOwnedGroups = db
+    .select({
+      id: groups.id,
+      name: groups.name,
+    })
+    .from(groups)
+    .where(eq(groups.userId, userId));
+
+  const groupsByMembership = await db
+    .select({
+      id: groups.id,
+      name: groups.name,
+      outstandingInvite: groupMemberships.hasAcceptedInvitation,
+    })
+    .from(groupMemberships)
+    .where(eq(groupMemberships.userId, userId))
+    .innerJoin(groups, eq(groupMemberships.groupId, groups.id));
+
+  return [
+    ...(await loadOwnedGroups).map((x) => ({ ...x, outstandingInvite: false })),
+    ...groupsByMembership.map((x) => {
+      x.outstandingInvite = !x.outstandingInvite;
+      return x;
+    }),
+  ];
+}
