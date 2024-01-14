@@ -1,4 +1,5 @@
 import {
+  boolean,
   integer,
   pgTable,
   serial,
@@ -19,6 +20,9 @@ export const groupMemberships = pgTable(
     groupId: integer("groupId")
       .references(() => groups.id)
       .notNull(),
+    hasAcceptedInvitation: boolean("hasAcceptedInvitation")
+      .notNull()
+      .default(false),
   },
   (t) => ({ userGroupMembership: uniqueIndex().on(t.userId, t.groupId) })
 );

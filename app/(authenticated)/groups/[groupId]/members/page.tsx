@@ -2,14 +2,14 @@ import { getGroupMembers } from "@/lib/data/groups";
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Avatar } from "@/components/ui/avatar";
 import UserAvatar from "@/components/layout/user-avatar";
+import { Button } from "@/components/ui/button";
+import { InviteToGroupDialog } from "./(goals)/invite-to-group-dialog";
 
 export default async function GroupMembersPage({
   params: { groupId },
@@ -19,10 +19,20 @@ export default async function GroupMembersPage({
   const members = await getGroupMembers({ groupId: +groupId });
   return (
     <div>
+      <InviteToGroupDialog
+        defaultValues={{
+          email: "",
+          groupId: groupId,
+        }}
+      >
+        <Button>
+          DEMO: Benutzer einladen (wird später quickaction in group layout)
+        </Button>
+      </InviteToGroupDialog>
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[100px]"></TableHead>
+            <TableHead className="w-[50px]"></TableHead>
             <TableHead>Name</TableHead>
             <TableHead>Email</TableHead>
             <TableHead>Rolle</TableHead>
@@ -36,7 +46,13 @@ export default async function GroupMembersPage({
               </TableCell>
               <TableCell>{mem.name}</TableCell>
               <TableCell>{mem.email}</TableCell>
-              <TableCell>Mitglied</TableCell>
+              <TableCell>
+                {mem.isOwner
+                  ? "Besitzer"
+                  : mem.hasAcceptedInvitation
+                    ? "Mitglied"
+                    : "Eingeladen"}
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
