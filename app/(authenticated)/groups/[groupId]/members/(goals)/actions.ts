@@ -38,20 +38,20 @@ export async function inviteUser(_: any, formData: FormData) {
     };
   }
 
-  const affectedUser = await db.query.users.findFirst({
+  const invitedUser = await db.query.users.findFirst({
     where: eq(users.email, payload.email.toLocaleLowerCase().trim()),
     columns: {
       id: true,
     },
   });
 
-  if (affectedUser == null) {
+  if (invitedUser == null) {
     return {
       message: "Dieser Benutzer existiert nicht.",
     };
   }
 
-  if (affectedGroup.userId == affectedUser.id) {
+  if (affectedGroup.userId == invitedUser.id) {
     return {
       message: "Sie können sich nicht selbst einladen.",
     };
@@ -61,7 +61,7 @@ export async function inviteUser(_: any, formData: FormData) {
     // TODO: Handle unique constraint violation
     await db.insert(groupMemberships).values({
       groupId: groupId,
-      userId: session.user.id,
+      userId: invitedUser.id,
     });
   } catch (e) {
     if (isUniqueConstraintError(e)) {
