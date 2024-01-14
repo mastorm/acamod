@@ -12,5 +12,5 @@ export async function getGroupMembers({ groupId }: { groupId: number }) {
     })
     .from(groupMemberships)
     .leftJoin(users, eq(groupMemberships.userId, users.id))
-    .where(eq(groupMemberships.id, groupId));
+    .where(eq(groupMemberships.groupId, groupId));
 }
