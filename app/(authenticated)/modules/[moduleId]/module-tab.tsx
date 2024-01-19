@@ -5,11 +5,11 @@ import type { Tab } from "./module-tabs";
 import { useMemo } from "react";
 import { cva } from "class-variance-authority";
 
-const tabStyle = cva("p-2 rounded hover:bg-accent", {
+const tabStyle = cva("p-2 hover:bg-accent", {
   variants: {
     isActive: {
       true: "border-b-accent border-b",
-      false: "",
+      false: "font-thin",
     },
   },
 });

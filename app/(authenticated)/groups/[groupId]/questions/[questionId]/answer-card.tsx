@@ -1,14 +1,10 @@
 import {
   Card,
-  CardContent,
   CardDescription,
   CardFooter,
   CardHeader,
-  CardTitle,
   CardDate,
 } from "@/components/ui/card";
-import Link from "next/link";
-import { urls } from "@/lib/urls";
 import React from "react";
 
 interface AnswerCardProps {

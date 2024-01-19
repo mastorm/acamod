@@ -27,7 +27,7 @@ interface ModuleTabsProps {
 export default function ModuleTabs({ moduleId }: ModuleTabsProps) {
   const tabs = getTabs(moduleId);
   return (
-    <div className=" flex gap-4 p-2 border border-accent rounded">
+    <div className=" flex gap-4">
       {tabs.map((x) => (
         <ModuleTab key={x.url} tab={x} />
       ))}

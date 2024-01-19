@@ -70,36 +70,40 @@ export default async function ModuleDetailLayout({
         </>
       }
     >
-      <div className="flex flex-col gap-4 items-baseline">
-        {moduleUsage?.targetDate && !moduleUsage?.completedDate && (
-          <div className=" border-teal-500 border p-4 items-center rounded">
-            <h2 className="pb-2 text-2xl font-bold flex gap-4 items-center">
-              <FlagIcon />
-              Modulziel
-            </h2>
-            <p>
-              Dein Ziel ist es, das Modul bis zum{" "}
-              <strong>{moduleUsage.targetDate.toLocaleDateString()}</strong>{" "}
-              abzuschließen.
-            </p>
-          </div>
-        )}
-        {moduleUsage?.completedDate && (
-          <div className=" border-teal-500 border p-4 items-center rounded">
-            <h2 className="pb-2 text-2xl font-bold flex gap-4 items-center">
-              <FlagIcon />
-              Modulziel
-            </h2>
-            <p>
-              Du hast dieses Modul am{" "}
-              <strong>{moduleUsage.completedDate.toLocaleDateString()}</strong>{" "}
-              abgeschlossen.
-            </p>
-          </div>
-        )}
+      <div className="grid gap-4">
+        <div className="flex">
+          {moduleUsage?.targetDate && !moduleUsage?.completedDate && (
+            <div className=" border-teal-500 border p-4 items-center rounded">
+              <h2 className="pb-2 text-2xl font-bold flex gap-4 items-center">
+                <FlagIcon />
+                Modulziel
+              </h2>
+              <p>
+                Dein Ziel ist es, das Modul bis zum{" "}
+                <strong>{moduleUsage.targetDate.toLocaleDateString()}</strong>{" "}
+                abzuschließen.
+              </p>
+            </div>
+          )}
+          {moduleUsage?.completedDate && (
+            <div className=" border-teal-500 border p-4 items-center rounded">
+              <h2 className="pb-2 text-2xl font-bold flex gap-4 items-center">
+                <FlagIcon />
+                Modulziel
+              </h2>
+              <p>
+                Du hast dieses Modul am{" "}
+                <strong>
+                  {moduleUsage.completedDate.toLocaleDateString()}
+                </strong>{" "}
+                abgeschlossen.
+              </p>
+            </div>
+          )}
+        </div>
         <ModuleTabs moduleId={+moduleId} />
+        {children}
       </div>
-      {children}
     </DetailLayout>
   );
 }
