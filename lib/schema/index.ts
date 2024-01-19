@@ -5,5 +5,7 @@ export * from "./accounts";
 export * from "./verificationTokens";
 export * from "./groups";
 export * from "./attachments";
+export * from "./questions";
+export * from "./answers";
 export * from "./moduleUsages";
 export * from "./groupMemberships";
