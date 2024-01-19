@@ -1,10 +1,10 @@
-import { pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
+import { integer, pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
 import { groups } from "./groups";
 import { users } from "./users";
 
 export const Questions = pgTable("forum_questions", {
   id: serial("id").primaryKey(),
-  groupId: text("groupId")
+  groupId: integer("groupId")
     .references(() => groups.id)
     .notNull(),
   createdBy: text("createdBy")
