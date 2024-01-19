@@ -1,0 +1,1 @@
+ALTER TABLE "groupMemberships" ADD COLUMN "hasAcceptedInvitation" boolean DEFAULT false NOT NULL;
