@@ -1,8 +1,9 @@
 "use client";
+
 import { usePathname } from "next/navigation";
-import Link from "next/link";
-import type { Tab } from "./module-tabs";
+import type { TabType } from "./types";
 import { useMemo } from "react";
+import Link from "next/link";
 import { cva } from "class-variance-authority";
 
 const tabStyle = cva("p-2 hover:bg-accent", {
@@ -14,7 +15,7 @@ const tabStyle = cva("p-2 hover:bg-accent", {
   },
 });
 
-export function ModuleTab({ tab }: { tab: Tab }) {
+export function Tab({ tab }: { tab: TabType }) {
   const pathname = usePathname();
 
   const isActive = useMemo(() => {
