@@ -26,7 +26,6 @@ export default async function GroupDetailsPage({
     columns: {
       id: true,
       name: true,
-      // Weitere relevante Spalten für Gruppen
     },
     where: and(eq(groups.id, +groupId), eq(groups.userId, session.user.id)),
   });
@@ -38,7 +37,7 @@ export default async function GroupDetailsPage({
   const groupQuestions = await db
     .select()
     .from(Questions)
-    .where(eq(Questions.groupId, groupId));
+    .where(eq(Questions.groupId, +groupId));
 
   return (
     <DetailLayout

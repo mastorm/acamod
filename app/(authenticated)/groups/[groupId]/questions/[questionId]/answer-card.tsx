@@ -14,7 +14,7 @@ import React from "react";
 interface AnswerCardProps {
   answer: {
     id: number;
-    questionId: string;
+    questionId: number;
     postedBy: string;
     content: string;
     updatedAt: Date | null;

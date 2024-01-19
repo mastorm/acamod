@@ -30,7 +30,7 @@ export function CreateNewQuestionAction({
     const result = await db
       .insert(Questions)
       .values({
-        groupId,
+        groupId: +groupId,
         createdBy: session.user.id,
         title: payload.title,
         content: payload.content,

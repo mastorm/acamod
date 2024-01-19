@@ -17,7 +17,7 @@ interface QuestionCardProps {
     title: string;
     content: string;
     createdBy: string;
-    groupId: string;
+    groupId: number;
     createdAt: Date | null;
   };
 }

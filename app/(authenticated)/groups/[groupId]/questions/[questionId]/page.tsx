@@ -45,7 +45,7 @@ export default async function QuestionDetailsPage({
   const questionAnswers = await db
     .select()
     .from(Answers)
-    .where(eq(Answers.questionId, questionId));
+    .where(eq(Answers.questionId, +questionId));
 
   return (
     <main>

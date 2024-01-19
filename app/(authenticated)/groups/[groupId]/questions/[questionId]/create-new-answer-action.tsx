@@ -27,7 +27,7 @@ export function CreateNewAnswerAction({
     const result = await db
       .insert(Answers)
       .values({
-        questionId,
+        questionId: +questionId,
         postedBy: session.user.id,
         content: payload.content,
       })
