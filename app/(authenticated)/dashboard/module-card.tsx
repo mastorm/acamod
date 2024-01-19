@@ -8,21 +8,30 @@ import {
 import Link from "next/link";
 import { urls } from "@/lib/urls";
 import { moduleUsages } from "@/lib/schema";
+import { CheckCheckIcon, CheckIcon } from "lucide-react";
 
 interface ModuleCardProps {
   module: {
     id: number;
     name: string;
   };
-  moduleUsage: Pick<typeof moduleUsages.$inferSelect, "targetDate"> | null;
+  moduleUsage: Pick<typeof moduleUsages.$inferSelect, "completedDate"> | null;
 }
 
-export function ModuleCard({ module: { id, name } }: ModuleCardProps) {
+export function ModuleCard({
+  module: { id, name },
+  moduleUsage,
+}: ModuleCardProps) {
   return (
     <Link href={urls.moduleDetails(id)}>
-      <Card className="hover:bg-accent">
+      <Card className="hover:bg-accent bg-green-500/10">
         <CardHeader>
-          <CardTitle>{name}</CardTitle>
+          <div className="flex gap-4">
+            <CardTitle>{name}</CardTitle>
+            {moduleUsage?.completedDate && (
+              <CheckCheckIcon className="text-green-500" />
+            )}
+          </div>
         </CardHeader>
         <CardContent>
           <CardDescription>
