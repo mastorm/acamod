@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/table";
 import UserAvatar from "@/components/layout/user-avatar";
 import { Button } from "@/components/ui/button";
-import { InviteToGroupDialog } from "./(goals)/invite-to-group-dialog";
+import { InviteToGroupDialog } from "./(invites)/invite-to-group-dialog";
 
 export default async function GroupMembersPage({
   params: { groupId },
