@@ -10,6 +10,7 @@ import {
 import UserAvatar from "@/components/layout/user-avatar";
 import { Button } from "@/components/ui/button";
 import { InviteToGroupDialog } from "./(invites)/invite-to-group-dialog";
+import { MailIcon } from "lucide-react";
 
 export default async function GroupMembersPage({
   params: { groupId },
@@ -18,18 +19,8 @@ export default async function GroupMembersPage({
 }) {
   const members = await getGroupMembers({ groupId: +groupId });
   return (
-    <div>
-      <InviteToGroupDialog
-        defaultValues={{
-          email: "",
-          groupId: groupId,
-        }}
-      >
-        <Button>
-          DEMO: Benutzer einladen (wird später quickaction in group layout)
-        </Button>
-      </InviteToGroupDialog>
-      <Table>
+    <div className="flex flex-col gap-4">
+      <Table className="border">
         <TableHeader>
           <TableRow>
             <TableHead className="w-[50px]"></TableHead>
@@ -57,6 +48,18 @@ export default async function GroupMembersPage({
           ))}
         </TableBody>
       </Table>
+
+      <InviteToGroupDialog
+        defaultValues={{
+          email: "",
+          groupId: groupId,
+        }}
+      >
+        <Button variant={"outline"} className="place-self-end self-end">
+          <MailIcon className="mr-2" />
+          Benutzer einladen
+        </Button>
+      </InviteToGroupDialog>
     </div>
   );
 }
