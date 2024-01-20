@@ -16,17 +16,15 @@ export default async function ModuleNotes({
   });
 
   return (
-    <main className="pt-2">
-      <div className="flex justify-between">
-        <h1 className="text-2xl pb-4">Dateien</h1>
-        <FileUploadAction moduleId={+moduleId}>
-          <Button variant="outline">
-            <UploadCloudIcon className="mr-2" /> Datei hochladen
-          </Button>
-        </FileUploadAction>
+    <main className="flex gap-2 flex-col items-end">
+      <div className="w-full">
+        <Attachments moduleId={+moduleId} attachments={moduleAttachments} />
       </div>
-
-      <Attachments moduleId={+moduleId} attachments={moduleAttachments} />
+      <FileUploadAction moduleId={+moduleId}>
+        <Button variant="outline">
+          <UploadCloudIcon className="mr-2" /> Datei hochladen
+        </Button>
+      </FileUploadAction>
     </main>
   );
 }

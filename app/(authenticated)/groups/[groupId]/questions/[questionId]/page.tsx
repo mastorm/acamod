@@ -8,7 +8,7 @@ import { ActionButton } from "@/components/layout/action-button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { EditGroupAction } from "@/app/(authenticated)/groups/[groupId]/edit-group-action";
 import { CreateNewQuestionAction } from "@/app/(authenticated)/groups/[groupId]/create-new-question-action";
-import { QuestionCard } from "@/app/(authenticated)/groups/[groupId]/question-card";
+import { QuestionCard } from "@/app/(authenticated)/groups/[groupId]/questions/question-card";
 import { Questions } from "@/lib/schema/questions";
 import { Answers } from "@/lib/schema";
 import React from "react";

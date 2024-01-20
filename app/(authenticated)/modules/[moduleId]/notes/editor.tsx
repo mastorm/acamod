@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
+import { SaveAllIcon, SaveIcon } from "lucide-react";
 
 interface EditorProps {
   initial: string;
@@ -31,7 +32,9 @@ export function Editor({ initial, moduleId, onNoteChange }: EditorProps) {
         disabled={loading}
         className="place-self-end"
         onClick={handleSave}
+        variant="outline"
       >
+        <SaveIcon className="mr-2" />
         Speichern
       </Button>
     </div>
