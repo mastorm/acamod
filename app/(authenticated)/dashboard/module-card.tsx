@@ -15,7 +15,7 @@ interface ModuleCardProps {
   module: {
     id: number;
     name: string;
-    shortCode: string;
+    shortCode?: string | null;
   };
   moduleUsage: Pick<
     typeof moduleUsages.$inferSelect,
