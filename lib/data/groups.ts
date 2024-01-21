@@ -57,5 +57,5 @@ export async function getGroupsOfUser(userId: string) {
       x.outstandingInvite = !x.outstandingInvite;
       return x;
     }),
-  ];
+  ].toSorted((a, b) => a.name.localeCompare(b.name));
 }
