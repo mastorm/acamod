@@ -1,8 +1,8 @@
 import { ModuleCard, ModuleCollection } from "@/components/shared/modules";
 import { db } from "@/lib/database";
 import { getRequiredSession } from "@/lib/getSession";
-import { moduleUsages, modules } from "@/lib/schema";
-import { desc, eq, and } from "drizzle-orm";
+import { groupMemberships, moduleUsages, modules } from "@/lib/schema";
+import { desc, eq, and, or, exists } from "drizzle-orm";
 
 export default async function GroupModules({
   params: { groupId },
@@ -16,7 +16,21 @@ export default async function GroupModules({
     .where(
       and(
         eq(modules.sharedWithGroup, +groupId),
-        eq(moduleUsages.userId, session.user.id)
+
+        or(
+          eq(moduleUsages.userId, session.user.id),
+          exists(
+            db
+              .select({ userId: groupMemberships.userId })
+              .from(groupMemberships)
+              .where(
+                and(
+                  eq(groupMemberships.groupId, +groupId),
+                  eq(groupMemberships.userId, session.user.id)
+                )
+              )
+          )
+        )
       )
     )
     .leftJoin(moduleUsages, eq(modules.id, moduleUsages.moduleId))
