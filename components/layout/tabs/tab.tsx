@@ -6,7 +6,7 @@ import { useMemo } from "react";
 import Link from "next/link";
 import { cva } from "class-variance-authority";
 
-const tabStyle = cva("p-2 hover:bg-accent", {
+const tabStyle = cva("p-2 hover:bg-accent flex gap-4", {
   variants: {
     isActive: {
       true: "border-b-accent border-b",
@@ -24,7 +24,10 @@ export function Tab({ tab }: { tab: TabType }) {
 
   return (
     <Link href={tab.url}>
-      <div className={tabStyle({ isActive })}>{tab.title}</div>
+      <div className={tabStyle({ isActive })}>
+        {tab.icon}
+        {tab.title}
+      </div>
     </Link>
   );
 }
