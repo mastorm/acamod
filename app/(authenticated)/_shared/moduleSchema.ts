@@ -7,6 +7,7 @@ export const moduleSchema = z.object({
     .number()
     .optional()
     .pipe(z.number().max(20).min(0).optional()),
+  sharedWithGroup: z.string(),
 });
 
 export type ModuleSchema = z.infer<typeof moduleSchema>;

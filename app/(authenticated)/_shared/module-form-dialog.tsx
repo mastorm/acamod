@@ -10,11 +10,11 @@ import {
 } from "@/components/ui/dialog";
 import { PropsWithChildren, useState } from "react";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -26,10 +26,18 @@ import {
   ModuleSchema,
   moduleSchema,
 } from "@/app/(authenticated)/_shared/moduleSchema";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface CreateNewModuleDialogProps {
   onSave: (payload: ModuleSchema) => Promise<void>;
   defaultValues: ModuleSchema;
+  groups: { id: number; name: string }[];
   texts: {
     title: string;
     description: string;
@@ -45,6 +53,7 @@ export function ModuleFormDialog({
   children,
   onSave,
   defaultValues,
+  groups,
   texts,
 }: PropsWithChildren<CreateNewModuleDialogProps>) {
   const [busy, setBusy] = useState(false);
@@ -85,6 +94,44 @@ export function ModuleFormDialog({
                     <FormControl>
                       <Input placeholder="Mathematik I" {...field} />
                     </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="sharedWithGroup"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Geteilt mit Gruppe</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Gruppe wählen" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="none">
+                          <em>- Keine -</em>
+                        </SelectItem>
+
+                        {groups.map((group) => (
+                          <SelectItem
+                            key={group.id}
+                            value={group.id.toString()}
+                          >
+                            {group.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormDescription>
+                      Bei Auswahl einer Gruppe können die Mitglieder der Gruppe
+                      alle Modulinhalte sehen.
+                    </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}

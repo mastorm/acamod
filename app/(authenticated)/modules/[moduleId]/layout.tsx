@@ -25,6 +25,7 @@ export default async function ModuleDetailLayout({
       shortCode: true,
       credits: true,
       name: true,
+      sharedWithGroup: true,
     },
     where: and(eq(modules.userId, session.user.id), eq(modules.id, +moduleId)),
   });
@@ -65,6 +66,8 @@ export default async function ModuleDetailLayout({
               name: currentModule.name,
               shortCode: currentModule.shortCode ?? "",
               credits: currentModule.credits ?? 0,
+              sharedWithGroup:
+                currentModule.sharedWithGroup?.toString() ?? "none",
             }}
           />
         </>
