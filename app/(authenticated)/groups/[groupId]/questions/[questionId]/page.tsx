@@ -13,7 +13,7 @@ import { Questions } from "@/lib/schema/questions";
 import { Answers } from "@/lib/schema";
 import React from "react";
 import { CreateNewModuleAction } from "@/app/(authenticated)/dashboard/create-new-module-action";
-import { ModuleCard } from "@/app/(authenticated)/dashboard/module-card";
+import { ModuleCard } from "@/components/shared/modules/module-card";
 import { CreateNewGroupAction } from "@/app/(authenticated)/dashboard/create-new-group-action";
 import { GroupCard } from "@/app/(authenticated)/dashboard/group-card";
 import { CreateNewAnswerAction } from "@/app/(authenticated)/groups/[groupId]/questions/[questionId]/create-new-answer-action";

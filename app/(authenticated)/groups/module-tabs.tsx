@@ -1,8 +1,13 @@
 import { Tab, TabType, Tabs } from "@/components/layout/tabs";
-import { MailQuestionIcon, UserIcon } from "lucide-react";
+import { ComponentIcon, MailQuestionIcon, UserIcon } from "lucide-react";
 
 function getTabs(groupId: number) {
   return [
+    {
+      title: "Module",
+      url: `/groups/${groupId}/modules`,
+      icon: <ComponentIcon />,
+    },
     {
       title: "Mitglieder",
       url: `/groups/${groupId}/members`,

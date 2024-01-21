@@ -2,7 +2,6 @@ import { db } from "@/lib/database";
 import { CreateNewModuleAction } from "./create-new-module-action";
 import { getRequiredSession } from "@/lib/getSession";
 import { moduleUsages, modules } from "@/lib/schema";
-import { groups } from "@/lib/schema/groups";
 import { desc, eq } from "drizzle-orm";
 import { ModuleCard } from "@/components/shared/modules/module-card";
 import { GroupCard } from "./group-card";
