@@ -58,5 +58,5 @@ export const getGroupsOfUser = cache(async (userId: string) => {
       x.outstandingInvite = !x.outstandingInvite;
       return x;
     }),
-  ].toSorted((a, b) => a.name.localeCompare(b.name));
+  ].sort((a, b) => a.name.localeCompare(b.name));
 });
