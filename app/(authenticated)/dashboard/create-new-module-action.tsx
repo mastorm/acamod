@@ -3,7 +3,7 @@ import { ModuleFormDialog } from "../_shared/module-form-dialog";
 import { db } from "@/lib/database";
 import { modules } from "@/lib/schema";
 import { revalidatePath } from "next/cache";
-import { getSession } from "@/lib/getSession";
+import { getRequiredSession, getSession } from "@/lib/getSession";
 import { Button } from "@/components/ui/button";
 import React from "react";
 import { redirect } from "next/navigation";
@@ -12,8 +12,9 @@ import {
   ModuleSchema,
   moduleSchema,
 } from "@/app/(authenticated)/_shared/moduleSchema";
+import { getGroupsOfUser } from "@/lib/data/groups";
 
-export function CreateNewModuleAction() {
+export async function CreateNewModuleAction() {
   async function createModule(data: ModuleSchema) {
     "use server";
     const payload = moduleSchema.parse(data);
@@ -31,20 +32,26 @@ export function CreateNewModuleAction() {
         shortCode: payload.shortCode == "" ? null : payload.shortCode,
         credits: payload.credits == 0 ? null : payload.credits,
         userId: session.user.id,
+        sharedWithGroup:
+          payload.sharedWithGroup == "none" ? null : +payload.sharedWithGroup,
       })
       .returning({ id: modules.id });
 
     revalidatePath("/dashboard");
     redirect(urls.moduleDetails(result[0].id));
   }
+  const session = await getRequiredSession();
+  const groups = await getGroupsOfUser(session.user.id);
 
   return (
     <ModuleFormDialog
       onSave={createModule}
+      groups={groups}
       defaultValues={{
         credits: 0,
         name: "",
         shortCode: "",
+        sharedWithGroup: "none",
       }}
       texts={{
         description: "Bitte geben Sie die Details für das neue Moduls ein:",

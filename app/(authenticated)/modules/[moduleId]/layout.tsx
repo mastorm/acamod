@@ -1,8 +1,8 @@
 import { PropsWithChildren } from "react";
 import { getRequiredSession } from "@/lib/getSession";
 import { db } from "@/lib/database";
-import { and, eq } from "drizzle-orm";
-import { modules } from "@/lib/schema";
+import { and, eq, or, arrayContains, exists } from "drizzle-orm";
+import { groupMemberships, modules } from "@/lib/schema";
 import { notFound } from "next/navigation";
 import { DetailLayout } from "@/components/layout/detail-layout";
 import { ActionButton } from "@/components/layout/action-button";
@@ -19,15 +19,32 @@ export default async function ModuleDetailLayout({
   params: { moduleId },
 }: PropsWithChildren<ModuleDetailsPageProps>) {
   const session = await getRequiredSession();
-  const currentModule = await db.query.modules.findFirst({
-    columns: {
-      id: true,
-      shortCode: true,
-      credits: true,
-      name: true,
-    },
-    where: and(eq(modules.userId, session.user.id), eq(modules.id, +moduleId)),
-  });
+
+  const possibleModules = await db
+    .select()
+    .from(modules)
+    .where(
+      and(
+        or(
+          eq(modules.userId, session.user.id),
+          exists(
+            db
+              .select({ groupId: groupMemberships.groupId })
+              .from(groupMemberships)
+              .where(
+                and(
+                  eq(groupMemberships.userId, session.user.id),
+                  eq(groupMemberships.groupId, modules.sharedWithGroup)
+                )
+              )
+          )
+        ),
+        eq(modules.id, +moduleId)
+      )
+    )
+    .limit(1);
+
+  const currentModule = possibleModules[0];
 
   const moduleUsage = await findModuleUsage({
     moduleId: +moduleId,
@@ -65,6 +82,8 @@ export default async function ModuleDetailLayout({
               name: currentModule.name,
               shortCode: currentModule.shortCode ?? "",
               credits: currentModule.credits ?? 0,
+              sharedWithGroup:
+                currentModule.sharedWithGroup?.toString() ?? "none",
             }}
           />
         </>

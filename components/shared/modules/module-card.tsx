@@ -8,7 +8,7 @@ import {
 import Link from "next/link";
 import { urls } from "@/lib/urls";
 import { moduleUsages } from "@/lib/schema";
-import { CheckCheckIcon, CheckIcon } from "lucide-react";
+import { CheckCheckIcon } from "lucide-react";
 import { cva } from "class-variance-authority";
 
 interface ModuleCardProps {

@@ -1,6 +1,7 @@
 import { eq } from "drizzle-orm";
 import { db } from "../database";
 import { groupMemberships, groups, users } from "../schema";
+import { cache } from "react";
 
 export async function getGroupMembers({ groupId }: { groupId: number }) {
   const owner = await db
@@ -32,7 +33,7 @@ export async function getGroupMembers({ groupId }: { groupId: number }) {
   ];
 }
 
-export async function getGroupsOfUser(userId: string) {
+export const getGroupsOfUser = cache(async (userId: string) => {
   const loadOwnedGroups = db
     .select({
       id: groups.id,
@@ -58,4 +59,4 @@ export async function getGroupsOfUser(userId: string) {
       return x;
     }),
   ].toSorted((a, b) => a.name.localeCompare(b.name));
-}
+});

@@ -11,13 +11,17 @@ import { revalidatePath } from "next/cache";
 import { urls } from "@/lib/urls";
 import { and, eq } from "drizzle-orm";
 import { getRequiredSession } from "@/lib/getSession";
+import { getGroupsOfUser } from "@/lib/data/groups";
 
 interface EditModuleActionProps {
   moduleId: number;
   module: ModuleSchema;
 }
 
-export function EditModuleAction({ module, moduleId }: EditModuleActionProps) {
+export async function EditModuleAction({
+  module,
+  moduleId,
+}: EditModuleActionProps) {
   async function updateModule(updatedModule: ModuleSchema) {
     "use server";
 
@@ -33,6 +37,10 @@ export function EditModuleAction({ module, moduleId }: EditModuleActionProps) {
         shortCode:
           updatedModule.shortCode == "" ? null : updatedModule.shortCode,
         credits: updatedModule.credits == 0 ? null : updatedModule.credits,
+        sharedWithGroup:
+          updatedModule.sharedWithGroup == "none"
+            ? null
+            : +updatedModule.sharedWithGroup,
       })
       .where(
         and(eq(modules.id, moduleId), eq(modules.userId, session.user.id))
@@ -40,9 +48,12 @@ export function EditModuleAction({ module, moduleId }: EditModuleActionProps) {
 
     revalidatePath(urls.moduleDetails(moduleId));
   }
+  const session = await getRequiredSession();
+  const groups = await getGroupsOfUser(session.user.id);
 
   return (
     <ModuleFormDialog
+      groups={groups}
       texts={{
         description: "Bitte bearbeiten Sie das Modul:",
         title: "Modul bearbeiten",
