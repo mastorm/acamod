@@ -1,4 +1,5 @@
 import {
+  boolean,
   integer,
   pgTable,
   serial,
@@ -20,6 +21,9 @@ export const moduleUsages = pgTable(
       .references(() => modules.id)
       .notNull(),
     completedDate: timestamp("completedDate"),
+    completionPoints: integer("completionPoints"),
+    attempts: integer("attempts"),
+    passed: boolean("passed"),
     note: text("note"),
     targetDate: timestamp("targetDate"),
   },

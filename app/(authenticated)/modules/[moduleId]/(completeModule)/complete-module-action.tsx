@@ -3,9 +3,14 @@ import { getRequiredSession } from "@/lib/getSession";
 import { revalidatePath } from "next/cache";
 import { db } from "@/lib/database";
 import { CompleteModuleDialog } from "./complete-module-dialog";
-import { format } from "date-fns";
+import { format, parseISO } from "date-fns";
 import { findModuleUsage } from "@/lib/data/moduleUsages";
-import { moduleUsages } from "@/lib/schema";
+import { moduleUsages, modules } from "@/lib/schema";
+import { and, eq } from "drizzle-orm";
+import {
+  CompleteModuleSchemaType,
+  completeModuleSchema,
+} from "./complete-module-schema";
 
 interface FileUploadActionProps {
   moduleId: number;
@@ -16,14 +21,11 @@ export async function CompleteModuleAction({
   moduleId,
 }: PropsWithChildren<FileUploadActionProps>) {
   const session = await getRequiredSession();
-  const currentGoal = await findModuleUsage({
-    moduleId: moduleId,
-    userId: session.user.id,
-  });
 
-  async function completeModule() {
+  async function completeModule(values: CompleteModuleSchemaType) {
     "use server";
     const session = await getRequiredSession();
+    completeModuleSchema.parse(values);
 
     if (session.user == null) {
       throw new Error("Unauthorized");
@@ -36,19 +38,33 @@ export async function CompleteModuleAction({
     if (currentGoal == null) {
       await db.insert(moduleUsages).values({
         moduleId: moduleId,
-        completedDate: new Date(),
+        completedDate: parseISO(values.completedDate),
         userId: session.user.id,
+        attempts: values.attempts,
+        completionPoints: values.points,
+        passed: values.passed,
       });
     } else {
       await db.update(moduleUsages).set({
-        completedDate: new Date(),
+        completedDate: parseISO(values.completedDate),
+        attempts: values.attempts,
+        completionPoints: values.points,
+        passed: values.passed,
       });
     }
 
     revalidatePath(`/modules/${moduleId}`);
   }
   return (
-    <CompleteModuleDialog onSave={completeModule}>
+    <CompleteModuleDialog
+      defaultValues={{
+        completedDate: format(new Date(), "yyyy-MM-dd"),
+        attempts: 1,
+        points: 0,
+        passed: true,
+      }}
+      onSave={completeModule}
+    >
       {children}
     </CompleteModuleDialog>
   );

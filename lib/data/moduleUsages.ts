@@ -18,6 +18,9 @@ export const findModuleUsage = cache(async function (
       note: true,
       completedDate: true,
       targetDate: true,
+      completionPoints: true,
+      attempts: true,
+      passed: true,
     },
   });
 });
