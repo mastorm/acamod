@@ -90,7 +90,7 @@ export default async function ModuleDetailLayout({
       }
     >
       <div className="grid gap-4">
-        <div className="flex">
+        <div className="flex max-w-96">
           {moduleUsage?.targetDate && !moduleUsage?.completedDate && (
             <div className=" border-teal-500 border p-4 items-center rounded">
               <h2 className="pb-2 text-2xl font-bold flex gap-4 items-center">
@@ -108,14 +108,16 @@ export default async function ModuleDetailLayout({
             <div className=" border-teal-500 border p-4 items-center rounded">
               <h2 className="pb-2 text-2xl font-bold flex gap-4 items-center">
                 <FlagIcon />
-                Modulziel
+                Modul abgeschlossen
               </h2>
               <p>
                 Du hast dieses Modul am{" "}
                 <strong>
                   {moduleUsage.completedDate.toLocaleDateString()}
                 </strong>{" "}
-                abgeschlossen.
+                nach {moduleUsage.attempts} Versuchen mit{" "}
+                {moduleUsage.completionPoints} Punkten{" "}
+                {moduleUsage.passed ? "bestanden" : "nicht bestanden"}.
               </p>
             </div>
           )}
