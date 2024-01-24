@@ -22,6 +22,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { questionSchema, QuestionSchema } from "./questionSchema";
 import { useToast } from "@/components/ui/use-toast";
+import { Textarea } from "@/components/ui/textarea";
 
 interface QuestionFormDialogProps {
   onSave: (payload: QuestionSchema) => Promise<void>;
@@ -91,7 +92,7 @@ export function QuestionFormDialog({
                   <FormItem>
                     <FormLabel>Detaillierte Frage (*)</FormLabel>
                     <FormControl>
-                      <Input placeholder="Ausführliche Frage" {...field} />
+                      <Textarea placeholder="Ausführliche Frage" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

@@ -22,6 +22,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { answerSchema, AnswerSchema } from "./answerSchema";
 import { useToast } from "@/components/ui/use-toast";
+import { Textarea } from "@/components/ui/textarea";
 
 interface AnswerFormDialogProps {
   onSave: (payload: AnswerSchema) => Promise<void>;
@@ -76,7 +77,7 @@ export function AnswerFormDialog({
                   <FormItem>
                     <FormLabel>Detaillierte Antwort (*)</FormLabel>
                     <FormControl>
-                      <Input placeholder="Ausführliche Antwort" {...field} />
+                      <Textarea placeholder="Ausführliche Antwort" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

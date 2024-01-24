@@ -3,5 +3,6 @@ export const urls = {
     `/modules/${id}/${subRoute ?? "notes"}`,
   groupDetails: (id: number, subRoute?: "members" | "files" | "modules") =>
     `/groups/${id}/${subRoute ?? "modules"}`,
-  questionsDetails: (id: number) => `/groups/${id}/questions/${id}`,
+  questionsDetails: (groupId: number, questionId: number) =>
+    `/groups/${groupId}/questions/${questionId}`,
 };

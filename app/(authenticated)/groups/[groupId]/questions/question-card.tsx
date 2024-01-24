@@ -23,10 +23,10 @@ interface QuestionCardProps {
 }
 
 export function QuestionCard({
-  question: { id, title, content, createdBy, createdAt },
+  question: { id, title, content, createdBy, createdAt, groupId },
 }: QuestionCardProps) {
   return (
-    <Link href={urls.questionsDetails(id)}>
+    <Link href={urls.questionsDetails(groupId, id)}>
       <Card className="hover:bg-accent">
         <CardHeader>
           <CardTitle>
