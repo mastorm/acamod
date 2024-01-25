@@ -18,6 +18,7 @@ import { PropsWithChildren } from "react";
 import { EditGroupAction } from "./edit-group-action";
 import { ModuleTabs } from "../module-tabs";
 import { array } from "zod";
+import { hasAccessToGroup } from "@/lib/data/groups";
 
 interface GroupLayoutProps {
   params: {
@@ -35,24 +36,7 @@ export default async function GroupLayout({
     .select({ id: groups.id, name: groups.name })
     .from(groups)
     .where(
-      and(
-        eq(groups.id, +groupId),
-        or(
-          eq(groups.userId, session.user.id),
-
-          exists(
-            db
-              .select({ userId: groupMemberships.userId })
-              .from(groupMemberships)
-              .where(
-                and(
-                  eq(groupMemberships.groupId, +groupId),
-                  eq(groupMemberships.userId, session.user.id)
-                )
-              )
-          )
-        )
-      )
+      and(eq(groups.id, +groupId), hasAccessToGroup(groups.id, session.user.id))
     );
 
   const currentGroup = possibleGroups[0];

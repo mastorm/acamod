@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { SQLWrapper, and, eq, exists } from "drizzle-orm";
 import { db } from "../database";
 import { groupMemberships, groups, users } from "../schema";
 import { cache } from "react";
@@ -60,3 +60,22 @@ export const getGroupsOfUser = cache(async (userId: string) => {
     }),
   ].sort((a, b) => a.name.localeCompare(b.name));
 });
+export function hasAccessToGroup(groupId: number | SQLWrapper, userId: string) {
+  return exists(
+    db
+      .select({ userId: groupMemberships.userId })
+      .from(groupMemberships)
+      .where(
+        and(
+          eq(groupMemberships.groupId, groupId),
+          eq(groupMemberships.userId, userId)
+        )
+      )
+      .union(
+        db
+          .select({ userId: groups.userId })
+          .from(groups)
+          .where(eq(groups.id, groupId))
+      )
+  );
+}
