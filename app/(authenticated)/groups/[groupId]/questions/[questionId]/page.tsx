@@ -1,23 +1,13 @@
 import { db } from "@/lib/database";
 import { getRequiredSession } from "@/lib/getSession";
-import { eq } from "drizzle-orm";
+import { eq, and, or } from "drizzle-orm";
 import { notFound } from "next/navigation";
-import { DetailLayout } from "@/components/layout/detail-layout";
-import { PlusCircleIcon, UserIcon } from "lucide-react";
-import { ActionButton } from "@/components/layout/action-button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { EditGroupAction } from "@/app/(authenticated)/groups/[groupId]/edit-group-action";
-import { CreateNewQuestionAction } from "@/app/(authenticated)/groups/[groupId]/create-new-question-action";
-import { QuestionCard } from "@/app/(authenticated)/groups/[groupId]/questions/question-card";
 import { Questions } from "@/lib/schema/questions";
 import { Answers } from "@/lib/schema";
 import React from "react";
-import { CreateNewModuleAction } from "@/app/(authenticated)/dashboard/create-new-module-action";
-import { ModuleCard } from "@/components/shared/modules/module-card";
-import { CreateNewGroupAction } from "@/app/(authenticated)/dashboard/create-new-group-action";
-import { GroupCard } from "@/app/(authenticated)/dashboard/group-card";
 import { CreateNewAnswerAction } from "@/app/(authenticated)/groups/[groupId]/questions/[questionId]/create-new-answer-action";
 import { AnswerCard } from "@/app/(authenticated)/groups/[groupId]/questions/[questionId]/answer-card";
+import { hasAccessToGroup } from "@/lib/data/groups";
 
 interface QuestionDetailsPageProps {
   params: {
@@ -25,10 +15,22 @@ interface QuestionDetailsPageProps {
   };
 }
 
+async function questionDetailsPageData(questionId: string) {
+  const session = await getRequiredSession();
+  db.select()
+    .from(Questions)
+    .where(
+      and(
+        eq(Questions.id, +questionId),
+        hasAccessToGroup(Questions.groupId, session.user.id)
+      )
+    )
+    .leftJoin(Answers, eq(Questions.id, Answers.questionId));
+}
+
 export default async function QuestionDetailsPage({
   params: { questionId },
 }: QuestionDetailsPageProps) {
-  const session = await getRequiredSession();
   const currentQuestion = await db.query.Questions.findFirst({
     columns: {
       id: true,
@@ -58,7 +60,6 @@ export default async function QuestionDetailsPage({
         </h3>
         <CreateNewAnswerAction questionId={questionId} />
       </div>
-      {/* TODO: Show list of groups here*/}
       <div className="grid gap-8 grid-cols-1 md:grid-cols-2 xl:grid-cols-4">
         {questionAnswers.map((answer) => (
           <AnswerCard key={answer.id} answer={answer} />
