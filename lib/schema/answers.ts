@@ -1,4 +1,11 @@
-import { integer, pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
+import {
+  boolean,
+  integer,
+  pgTable,
+  serial,
+  text,
+  timestamp,
+} from "drizzle-orm/pg-core";
 import { Questions } from "./questions";
 import { users } from "./users";
 
@@ -13,4 +20,5 @@ export const Answers = pgTable("forum_answers", {
   content: text("content").notNull(),
   createdAt: timestamp("createdAt").defaultNow(),
   updatedAt: timestamp("updatedAt").defaultNow(),
+  isBestAnswer: boolean("isBestAnswer").default(false),
 });
