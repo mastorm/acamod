@@ -1,13 +1,15 @@
 import { db } from "@/lib/database";
 import { getRequiredSession } from "@/lib/getSession";
-import { eq } from "drizzle-orm";
+import { eq, and } from "drizzle-orm";
 import { notFound } from "next/navigation";
-import { CheckCheckIcon } from "lucide-react";
 import { Questions } from "@/lib/schema/questions";
 import { Answers } from "@/lib/schema";
 import React from "react";
 import { CreateNewAnswerAction } from "@/app/(authenticated)/groups/[groupId]/questions/[questionId]/create-new-answer-action";
-import { AnswerDivider } from "@/app/(authenticated)/groups/[groupId]/questions/[questionId]/answer-divider";
+import { AnswerCard } from "@/app/(authenticated)/groups/[groupId]/questions/[questionId]/answer-card";
+import { hasAccessToGroup } from "@/lib/data/groups";
+import { CheckCheckIcon } from "lucide-react";
+import { AnswerDivider } from "./answer-divider";
 
 interface QuestionDetailsPageProps {
   params: {
@@ -32,10 +34,22 @@ const sortAnswers = (answers: Answer[]) => {
   });
 };
 
+async function questionDetailsPageData(questionId: string) {
+  const session = await getRequiredSession();
+  db.select()
+    .from(Questions)
+    .where(
+      and(
+        eq(Questions.id, +questionId),
+        hasAccessToGroup(Questions.groupId, session.user.id)
+      )
+    )
+    .leftJoin(Answers, eq(Questions.id, Answers.questionId));
+}
+
 export default async function QuestionDetailsPage({
   params: { questionId },
 }: QuestionDetailsPageProps) {
-  const session = await getRequiredSession();
   const currentQuestion = await db.query.Questions.findFirst({
     columns: {
       id: true,
@@ -70,8 +84,7 @@ export default async function QuestionDetailsPage({
         </div>
         <h3 className="text-xl break-words ">{currentQuestion.content}</h3>
       </div>
-
-      <div className="grid grid-cols-1 overflow-auto mb-8">
+      <div className="grid gap-8 grid-cols-1 md:grid-cols-2 xl:grid-cols-4">
         {questionAnswers.map((answer) => (
           <div key={answer.id}>
             <AnswerDivider
