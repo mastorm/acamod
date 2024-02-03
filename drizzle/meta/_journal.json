@@ -120,6 +120,13 @@
       "when": 1705930637222,
       "tag": "0016_aspiring_talisman",
       "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "5",
+      "when": 1706955015432,
+      "tag": "0017_colossal_blue_blade",
+      "breakpoints": true
     }
   ]
 }
