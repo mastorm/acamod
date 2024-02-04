@@ -59,7 +59,7 @@ export function InviteToGroupDialog({
           </Field>
         </form>
         <DialogFooter>
-          <SubmitButton>Mitglied einladen</SubmitButton>
+          <SubmitButton form="form">Mitglied einladen</SubmitButton>
         </DialogFooter>
       </DialogContent>
     </Dialog>

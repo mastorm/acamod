@@ -19,6 +19,7 @@ import { EditGroupAction } from "./edit-group-action";
 import { ModuleTabs } from "../module-tabs";
 import { array } from "zod";
 import { hasAccessToGroup } from "@/lib/data/groups";
+import { LeaveGroupAction } from "./(leave-group)/leave-group-action";
 
 interface GroupLayoutProps {
   params: {
@@ -49,12 +50,15 @@ export default async function GroupLayout({
       subtitle=""
       // Untertitel oder andere relevante Informationen können hier hinzugefügt werden
       actions={
-        <EditGroupAction
-          groupId={currentGroup.id}
-          group={{
-            name: currentGroup.name,
-          }}
-        />
+        <>
+          <EditGroupAction
+            groupId={currentGroup.id}
+            group={{
+              name: currentGroup.name,
+            }}
+          />
+          <LeaveGroupAction groupId={currentGroup.id} />
+        </>
       }
     >
       <div className="grid gap-2">

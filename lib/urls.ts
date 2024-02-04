@@ -5,4 +5,5 @@ export const urls = {
     `/groups/${id}/${subRoute ?? "modules"}`,
   questionsDetails: (groupId: number, questionId: number) =>
     `/groups/${groupId}/questions/${questionId}`,
+  dashboard: () => "/dashboard",
 };
