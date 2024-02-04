@@ -157,7 +157,13 @@ export function ModuleFormDialog({
                     <FormItem>
                       <FormLabel>Credits</FormLabel>
                       <FormControl>
-                        <Input type="number" placeholder="5" {...field} />
+                        <Input
+                          type="number"
+                          min={0}
+                          max={20}
+                          placeholder="5"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
