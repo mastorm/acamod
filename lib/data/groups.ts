@@ -79,3 +79,14 @@ export function hasAccessToGroup(groupId: number | SQLWrapper, userId: string) {
       )
   );
 }
+
+export async function isGroupOwner(groupId: number, userId: string) {
+  const group = await db.query.groups.findFirst({
+    columns: {
+      id: true,
+    },
+    where: and(eq(groups.id, groupId), eq(groups.userId, userId)),
+  });
+
+  return group != null;
+}
