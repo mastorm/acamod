@@ -1,4 +1,5 @@
 import { urls } from "@/lib/urls";
+import { error } from "console";
 import { redirect } from "next/navigation";
 
 interface GroupDetailsPageProps {

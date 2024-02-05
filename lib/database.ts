@@ -5,7 +5,8 @@ import * as schema from "./schema";
 
 neonConfig.fetchConnectionCache = true;
 const env = getEnvironment();
-const sql = neon(env.CONNECTION_STRING);
+const sql = neon(env.CONNECTION_STRING, {});
 export const db = drizzle(sql, {
   schema: schema,
+  logger: true,
 });
