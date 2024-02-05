@@ -41,14 +41,14 @@ export async function CompleteModuleAction({
         completedDate: parseISO(values.completedDate),
         userId: session.user.id,
         attempts: values.attempts,
-        completionPoints: values.points,
+        reachedGrade: values.grade.toString(),
         passed: values.passed,
       });
     } else {
       await db.update(moduleUsages).set({
         completedDate: parseISO(values.completedDate),
         attempts: values.attempts,
-        completionPoints: values.points,
+        reachedGrade: values.grade.toString(),
         passed: values.passed,
       });
     }
@@ -60,7 +60,7 @@ export async function CompleteModuleAction({
       defaultValues={{
         completedDate: format(new Date(), "yyyy-MM-dd"),
         attempts: 1,
-        points: 0,
+        grade: 0,
         passed: true,
       }}
       onSave={completeModule}

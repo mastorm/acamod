@@ -92,12 +92,18 @@ export function CompleteModuleDialog({
               />
               <FormField
                 control={form.control}
-                name="points"
+                name="grade"
                 render={({ field }) => (
                   <FormItem className="w-full">
-                    <FormLabel>Punkte</FormLabel>
+                    <FormLabel>Note</FormLabel>
                     <FormControl>
-                      <Input type="number" min={0} max={100} {...field} />
+                      <Input
+                        type="number"
+                        step="0.1"
+                        min={1.0}
+                        max={6.0}
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

@@ -8,5 +8,4 @@ const env = getEnvironment();
 const sql = neon(env.CONNECTION_STRING);
 export const db = drizzle(sql, {
   schema: schema,
-  logger: process.env.NODE_ENV === "development",
 });

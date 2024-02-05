@@ -18,7 +18,7 @@ export const findModuleUsage = cache(async function (
       note: true,
       completedDate: true,
       targetDate: true,
-      completionPoints: true,
+      reachedGrade: true,
       attempts: true,
       passed: true,
     },
