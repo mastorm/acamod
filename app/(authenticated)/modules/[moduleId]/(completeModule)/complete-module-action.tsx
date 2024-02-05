@@ -41,14 +41,14 @@ export async function CompleteModuleAction({
         completedDate: parseISO(values.completedDate),
         userId: session.user.id,
         attempts: values.attempts,
-        reachedGrade: values.grade,
+        reachedGrade: values.grade.toString(),
         passed: values.passed,
       });
     } else {
       await db.update(moduleUsages).set({
         completedDate: parseISO(values.completedDate),
         attempts: values.attempts,
-        reachedGrade: values.grade,
+        reachedGrade: values.grade.toString(),
         passed: values.passed,
       });
     }
