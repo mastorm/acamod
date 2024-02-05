@@ -11,7 +11,7 @@ export const findModuleUsage = cache(async function (
 ) {
   return db.query.moduleUsages.findFirst({
     where: and(
-      eq(moduleUsages.userId, moduleUsages.userId),
+      eq(moduleUsages.userId, params.userId),
       eq(moduleUsages.moduleId, params.moduleId)
     ),
     columns: {
