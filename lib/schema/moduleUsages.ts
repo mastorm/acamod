@@ -6,6 +6,7 @@ import {
   text,
   timestamp,
   uniqueIndex,
+  decimal,
 } from "drizzle-orm/pg-core";
 import { users } from "./users";
 import { modules } from "./modules";
@@ -21,7 +22,7 @@ export const moduleUsages = pgTable(
       .references(() => modules.id)
       .notNull(),
     completedDate: timestamp("completedDate"),
-    completionPoints: integer("completionPoints"),
+    reachedGrade: decimal("reachedGrade", { precision: 3, scale: 1 }),
     attempts: integer("attempts"),
     passed: boolean("passed"),
     note: text("note"),

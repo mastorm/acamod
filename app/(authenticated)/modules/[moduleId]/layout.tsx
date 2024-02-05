@@ -13,6 +13,7 @@ import ModuleTabs from "@/app/(authenticated)/modules/[moduleId]/module-tabs";
 import { SetGoalAction } from "./(goals)/set-goal-action";
 import { findModuleUsage } from "@/lib/data/moduleUsages";
 import { CompleteModuleAction } from "./(completeModule)/complete-module-action";
+import { format } from "date-fns";
 
 export default async function ModuleDetailLayout({
   children,
@@ -113,11 +114,14 @@ export default async function ModuleDetailLayout({
               <p>
                 Du hast dieses Modul am{" "}
                 <strong>
-                  {moduleUsage.completedDate.toLocaleDateString()}
+                  {format(moduleUsage.completedDate, "dd.MM.yyyy")}
                 </strong>{" "}
-                nach {moduleUsage.attempts} Versuchen mit{" "}
-                {moduleUsage.completionPoints} Punkten{" "}
-                {moduleUsage.passed ? "bestanden" : "nicht bestanden"}.
+                nach {moduleUsage.attempts} Versuchen mit der Note{" "}
+                <strong>
+                  {moduleUsage.reachedGrade}{" "}
+                  {moduleUsage.passed ? "bestanden" : "nicht bestanden"}
+                </strong>
+                .
               </p>
             </div>
           )}

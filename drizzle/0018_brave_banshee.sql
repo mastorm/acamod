@@ -1,0 +1,1 @@
+ALTER TABLE "moduleUsages" RENAME COLUMN "completionPoints" TO "reachedGrade";
