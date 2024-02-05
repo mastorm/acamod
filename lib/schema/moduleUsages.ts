@@ -7,6 +7,7 @@ import {
   timestamp,
   uniqueIndex,
   decimal,
+  index,
 } from "drizzle-orm/pg-core";
 import { users } from "./users";
 import { modules } from "./modules";
@@ -28,5 +29,8 @@ export const moduleUsages = pgTable(
     note: text("note"),
     targetDate: timestamp("targetDate"),
   },
-  (t) => ({ userModule: uniqueIndex().on(t.userId, t.moduleId) })
+  (t) => ({
+    userModule: uniqueIndex().on(t.userId, t.moduleId),
+    userId: index().on(t.userId),
+  })
 );

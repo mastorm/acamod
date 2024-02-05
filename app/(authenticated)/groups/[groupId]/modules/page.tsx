@@ -4,6 +4,7 @@ import { db } from "@/lib/database";
 import { getRequiredSession } from "@/lib/getSession";
 import { moduleUsages, modules } from "@/lib/schema";
 import { and, desc, eq } from "drizzle-orm";
+import { GamificationOutlet } from "../(gamifications)/gamification-outlet";
 
 export default async function GroupModules({
   params: { groupId },
@@ -20,7 +21,13 @@ export default async function GroupModules({
         hasAccessToGroup(+groupId, session.user.id)
       )
     )
-    .leftJoin(moduleUsages, eq(modules.id, moduleUsages.moduleId))
+    .leftJoin(
+      moduleUsages,
+      and(
+        eq(modules.id, moduleUsages.moduleId),
+        eq(moduleUsages.userId, session.user.id)
+      )
+    )
     .orderBy(
       desc(moduleUsages.completedDate),
       modules.name,
@@ -28,14 +35,17 @@ export default async function GroupModules({
     );
 
   return (
-    <ModuleCollection>
-      {userModules.map((x) => (
-        <ModuleCard
-          key={x.modules.id}
-          module={x.modules}
-          moduleUsage={x.moduleUsages}
-        />
-      ))}
-    </ModuleCollection>
+    <div className="flex gap-5 flex-col">
+      <GamificationOutlet groupId={+groupId} />
+      <ModuleCollection>
+        {userModules.map((x) => (
+          <ModuleCard
+            key={x.modules.id}
+            module={x.modules}
+            moduleUsage={x.moduleUsages}
+          />
+        ))}
+      </ModuleCollection>
+    </div>
   );
 }
