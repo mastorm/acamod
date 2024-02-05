@@ -20,7 +20,13 @@ export default async function GroupModules({
         hasAccessToGroup(+groupId, session.user.id)
       )
     )
-    .leftJoin(moduleUsages, eq(modules.id, moduleUsages.moduleId))
+    .leftJoin(
+      moduleUsages,
+      and(
+        eq(modules.id, moduleUsages.moduleId),
+        eq(moduleUsages.userId, session.user.id)
+      )
+    )
     .orderBy(
       desc(moduleUsages.completedDate),
       modules.name,
