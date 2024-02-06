@@ -35,7 +35,12 @@ export function CreateNewGroupAction() {
   return (
     <GroupFormDialog
       onSave={createGroup}
-      defaultValues={{ name: "" }}
+      defaultValues={{
+        name: "",
+        enableBestGradesGamification: false,
+        enableCreditGamification: false,
+        enableTimeSpentGamification: false,
+      }}
       texts={{
         description: "Bitte geben Sie die Details für die neue Gruppe ein:",
         title: "Neue Gruppe erstellen",
