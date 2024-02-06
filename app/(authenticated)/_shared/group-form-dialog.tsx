@@ -25,6 +25,7 @@ import {
   GroupSchema,
   groupSchema,
 } from "@/app/(authenticated)/_shared/groupSchema";
+import { Checkbox } from "@/components/ui/checkbox";
 
 interface GroupFormDialogProps {
   onSave: (payload: GroupSchema) => Promise<void>;
@@ -73,7 +74,11 @@ export function GroupFormDialog({
         <DialogHeader>{texts.title}</DialogHeader>
         <DialogDescription>{texts.description}</DialogDescription>
         <Form {...form}>
-          <form id="createGroupForm" onSubmit={form.handleSubmit(onSubmit)}>
+          <form
+            id="createGroupForm"
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="grid gap-2"
+          >
             <FormField
               control={form.control}
               name="name"
@@ -84,6 +89,58 @@ export function GroupFormDialog({
                     <Input placeholder="Gruppenname" {...field} />
                   </FormControl>
                   <FormMessage />
+                </FormItem>
+              )}
+            />
+            <span className="pt-2">Gamifications</span>
+            <FormField
+              control={form.control}
+              name="enableBestGradesGamification"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow">
+                  <FormControl>
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                  <div className="space-y-1 leading-none">
+                    <FormLabel>Gamification: Beste Noten</FormLabel>
+                  </div>
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="enableCreditGamification"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow">
+                  <FormControl>
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                  <div className="space-y-1 leading-none">
+                    <FormLabel>Gamification: Credits</FormLabel>
+                  </div>
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="enableTimeSpentGamification"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow">
+                  <FormControl>
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                  <div className="space-y-1 leading-none">
+                    <FormLabel>Gamification: Erfasste Zeit</FormLabel>
+                  </div>
                 </FormItem>
               )}
             />

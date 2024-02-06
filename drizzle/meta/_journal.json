@@ -148,6 +148,13 @@
       "when": 1707149559980,
       "tag": "0020_silent_centennial",
       "breakpoints": true
+    },
+    {
+      "idx": 21,
+      "version": "5",
+      "when": 1707237218009,
+      "tag": "0021_lonely_white_tiger",
+      "breakpoints": true
     }
   ]
 }

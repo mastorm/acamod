@@ -29,7 +29,9 @@ export function EditGroupAction({ group, groupId }: EditGroupActionProps) {
       .update(groups)
       .set({
         name: updatedGroup.name,
-        // Weitere Felder hier...
+        enableBestGradesGamification: updatedGroup.enableBestGradesGamification,
+        enableCreditGamification: updatedGroup.enableCreditGamification,
+        enableTimeSpentGamification: updatedGroup.enableTimeSpentGamification,
       })
       .where(and(eq(groups.id, groupId), eq(groups.userId, session.user.id)));
 

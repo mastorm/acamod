@@ -1,4 +1,4 @@
-import { index, pgTable, serial, text } from "drizzle-orm/pg-core";
+import { boolean, index, pgTable, serial, text } from "drizzle-orm/pg-core";
 import { users } from "./users";
 
 export const groups = pgTable(
@@ -9,6 +9,15 @@ export const groups = pgTable(
       .notNull()
       .references(() => users.id),
     name: text("name").notNull(),
+    enableCreditGamification: boolean("enableCreditGamification")
+      .notNull()
+      .default(false),
+    enableTimeSpentGamification: boolean("enableTimeSpentGamification")
+      .notNull()
+      .default(false),
+    enableBestGradesGamification: boolean("enableBestGradesGamification")
+      .notNull()
+      .default(false),
   },
   (t) => ({
     idxUser: index().on(t.userId),
