@@ -7,6 +7,9 @@ export const groupSchema = z.object({
     .max(100, {
       message: "Der Gruppenname darf maximal 100 Zeichen lang sein.",
     }),
+  enableCreditGamification: z.boolean(),
+  enableTimeSpentGamification: z.boolean(),
+  enableBestGradesGamification: z.boolean(),
 });
 
 export type GroupSchema = z.infer<typeof groupSchema>;

@@ -2,6 +2,18 @@ import { SQLWrapper, and, eq, exists } from "drizzle-orm";
 import { db } from "../database";
 import { groupMemberships, groups, users } from "../schema";
 import { cache } from "react";
+import { getRequiredSession } from "../getSession";
+
+export const getGroupById = cache(async function getGroupById(groupId: number) {
+  const session = await getRequiredSession();
+
+  return db.query.groups.findFirst({
+    where: and(
+      eq(groups.id, +groupId),
+      hasAccessToGroup(groups.id, session.user.id)
+    ),
+  });
+});
 
 export async function getGroupMembers({ groupId }: { groupId: number }) {
   const owner = await db

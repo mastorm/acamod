@@ -18,7 +18,7 @@ import { PropsWithChildren } from "react";
 import { EditGroupAction } from "./edit-group-action";
 import { ModuleTabs } from "../module-tabs";
 import { array } from "zod";
-import { hasAccessToGroup } from "@/lib/data/groups";
+import { getGroupById, hasAccessToGroup } from "@/lib/data/groups";
 import { LeaveGroupAction } from "./(leave-group)/leave-group-action";
 
 interface GroupLayoutProps {
@@ -33,17 +33,12 @@ export default async function GroupLayout({
 }: PropsWithChildren<GroupLayoutProps>) {
   const session = await getRequiredSession();
 
-  const possibleGroups = await db
-    .select({ id: groups.id, name: groups.name })
-    .from(groups)
-    .where(
-      and(eq(groups.id, +groupId), hasAccessToGroup(groups.id, session.user.id))
-    );
+  const currentGroup = await getGroupById(+groupId);
 
-  const currentGroup = possibleGroups[0];
   if (currentGroup == null) {
     return notFound();
   }
+
   return (
     <DetailLayout
       title={currentGroup.name}
@@ -51,12 +46,7 @@ export default async function GroupLayout({
       // Untertitel oder andere relevante Informationen können hier hinzugefügt werden
       actions={
         <>
-          <EditGroupAction
-            groupId={currentGroup.id}
-            group={{
-              name: currentGroup.name,
-            }}
-          />
+          <EditGroupAction groupId={currentGroup.id} group={currentGroup} />
           <LeaveGroupAction groupId={currentGroup.id} />
         </>
       }
