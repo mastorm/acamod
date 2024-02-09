@@ -1,0 +1,1 @@
+ALTER TABLE "moduleUsages" ADD COLUMN "hoursSpent" integer;
