@@ -6,7 +6,7 @@ import { groupMemberships, modules } from "@/lib/schema";
 import { notFound } from "next/navigation";
 import { DetailLayout } from "@/components/layout/detail-layout";
 import { ActionButton } from "@/components/layout/action-button";
-import { CheckIcon, FlagIcon } from "lucide-react";
+import { CheckIcon, FlagIcon, ClockIcon } from "lucide-react";
 import { EditModuleAction } from "@/app/(authenticated)/modules/[moduleId]/edit-module-action";
 import { ModuleDetailsPageProps } from "@/app/(authenticated)/modules/[moduleId]/routeParams";
 import ModuleTabs from "@/app/(authenticated)/modules/[moduleId]/module-tabs";
@@ -14,6 +14,8 @@ import { SetGoalAction } from "./(goals)/set-goal-action";
 import { findModuleUsage } from "@/lib/data/moduleUsages";
 import { CompleteModuleAction } from "./(completeModule)/complete-module-action";
 import { format } from "date-fns";
+import { TimeModuleAction } from "@/app/(authenticated)/modules/[moduleId]/(spentTime)/time-module-action";
+import { findSpentTime } from "@/lib/data/spentTime";
 
 export default async function ModuleDetailLayout({
   children,
@@ -35,19 +37,23 @@ export default async function ModuleDetailLayout({
               .where(
                 and(
                   eq(groupMemberships.userId, session.user.id),
-                  eq(groupMemberships.groupId, modules.sharedWithGroup)
-                )
-              )
-          )
+                  eq(groupMemberships.groupId, modules.sharedWithGroup),
+                ),
+              ),
+          ),
         ),
-        eq(modules.id, +moduleId)
-      )
+        eq(modules.id, +moduleId),
+      ),
     )
     .limit(1);
 
   const currentModule = possibleModules[0];
 
   const moduleUsage = await findModuleUsage({
+    moduleId: +moduleId,
+    userId: session.user.id,
+  });
+  const moduleTime = await findSpentTime({
     moduleId: +moduleId,
     userId: session.user.id,
   });
@@ -63,6 +69,14 @@ export default async function ModuleDetailLayout({
       }
       actions={
         <>
+          {moduleUsage?.completedDate && (
+            <TimeModuleAction moduleId={currentModule.id}>
+              <ActionButton>
+                {/*complete a module*/}
+                <ClockIcon />
+              </ActionButton>
+            </TimeModuleAction>
+          )}
           <CompleteModuleAction moduleId={currentModule.id}>
             <ActionButton>
               {/*complete a module*/}
@@ -91,7 +105,7 @@ export default async function ModuleDetailLayout({
       }
     >
       <div className="grid gap-4">
-        <div className="flex max-w-96">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {moduleUsage?.targetDate && !moduleUsage?.completedDate && (
             <div className=" border-teal-500 border p-4 items-center rounded">
               <h2 className="pb-2 text-2xl font-bold flex gap-4 items-center">
@@ -100,7 +114,7 @@ export default async function ModuleDetailLayout({
               </h2>
               <p>
                 Dein Ziel ist es, das Modul bis zum{" "}
-                <strong>{moduleUsage.targetDate.toLocaleDateString()}</strong>{" "}
+                <strong>{format(moduleUsage.targetDate, "dd.MM.yyyy")}</strong>{" "}
                 abzuschließen.
               </p>
             </div>
@@ -123,6 +137,26 @@ export default async function ModuleDetailLayout({
                 </strong>
                 .
               </p>
+            </div>
+          )}
+          {moduleUsage?.completedDate && (
+            <div
+              className={`border p-4 rounded items-center ${
+                moduleTime?.hoursSpent ? "border-teal-500" : "border-gray-400"
+              }`}
+            >
+              <h2 className="pb-2 text-2xl font-bold flex gap-4 items-center">
+                <ClockIcon />
+                Zeit für das Modul
+              </h2>
+              {moduleTime?.hoursSpent ? (
+                <p>
+                  Du hast <strong>{moduleTime.hoursSpent} Stunden</strong> für
+                  dieses Modul aufgewendet.
+                </p>
+              ) : (
+                <p>Zeit noch nicht erfasst.</p>
+              )}
             </div>
           )}
         </div>

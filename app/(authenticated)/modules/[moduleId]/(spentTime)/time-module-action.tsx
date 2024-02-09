@@ -2,51 +2,47 @@ import { PropsWithChildren } from "react";
 import { getRequiredSession } from "@/lib/getSession";
 import { revalidatePath } from "next/cache";
 import { db } from "@/lib/database";
-import { SetGoalDialog } from "./set-goal-dialog";
-import { GoalSchema, goalSchema } from "./goalSchema";
-import { format } from "date-fns";
-import { findModuleUsage } from "@/lib/data/moduleUsages";
-import { moduleUsages } from "@/lib/schema";
+import { TimeSpentDialog } from "./time-module-dialog";
+import { format, parseISO } from "date-fns";
+import { moduleUsages, modules } from "@/lib/schema";
 import { and, eq } from "drizzle-orm";
+import { TimeSpentSchemaType, timeSpentSchema } from "./time-module-schema";
+import { findSpentTime } from "@/lib/data/spentTime";
 
 interface FileUploadActionProps {
   moduleId: number;
 }
 
-export async function SetGoalAction({
+export async function TimeModuleAction({
   children,
   moduleId,
 }: PropsWithChildren<FileUploadActionProps>) {
   const session = await getRequiredSession();
-  const currentGoal = await findModuleUsage({
-    moduleId: moduleId,
-    userId: session.user.id,
-  });
 
-  async function setGoal(payload: GoalSchema) {
+  async function spentTimeModule(values: TimeSpentSchemaType) {
     "use server";
-    goalSchema.parse(payload);
     const session = await getRequiredSession();
+    timeSpentSchema.parse(values);
 
     if (session.user == null) {
       throw new Error("Unauthorized");
     }
 
-    const currentGoal = await findModuleUsage({
+    const spentTime = await findSpentTime({
       moduleId: +moduleId,
       userId: session.user.id,
     });
-    if (currentGoal == null) {
+    if (spentTime == null) {
       await db.insert(moduleUsages).values({
         moduleId: moduleId,
-        targetDate: new Date(payload.targetDate!),
         userId: session.user.id,
+        hoursSpent: values.hoursSpent,
       });
     } else {
       await db
         .update(moduleUsages)
         .set({
-          targetDate: new Date(payload.targetDate!),
+          hoursSpent: values.hoursSpent,
         })
         .where(
           and(
@@ -59,15 +55,13 @@ export async function SetGoalAction({
     revalidatePath(`/modules/${moduleId}`);
   }
   return (
-    <SetGoalDialog
-      onSave={setGoal}
+    <TimeSpentDialog
       defaultValues={{
-        targetDate: currentGoal?.targetDate
-          ? format(currentGoal.targetDate, "yyyy-MM-dd")
-          : "",
+        hoursSpent: 0,
       }}
+      onSave={spentTimeModule}
     >
       {children}
-    </SetGoalDialog>
+    </TimeSpentDialog>
   );
 }

@@ -10,6 +10,7 @@ import { urls } from "@/lib/urls";
 import { moduleUsages } from "@/lib/schema";
 import { CheckCheckIcon } from "lucide-react";
 import { cva } from "class-variance-authority";
+import { format } from "date-fns";
 
 interface ModuleCardProps {
   module: {
@@ -34,9 +35,9 @@ const cardStyles = cva("hover:bg-accent ", {
 
 function moduleStatusText(usage: ModuleCardProps["moduleUsage"]) {
   if (usage?.completedDate) {
-    return `Abgeschlossen am ${usage.completedDate.toLocaleDateString()}`;
+    return `Abgeschlossen am ${format(usage.completedDate, "dd.MM.yyyy")}`;
   } else if (usage?.targetDate) {
-    return `Ziel: ${usage.targetDate.toLocaleDateString()}`;
+    return `Ziel: ${format(usage.targetDate, "dd.MM.yyyy")}`;
   }
   return "Noch kein Ziel gesetzt";
 }

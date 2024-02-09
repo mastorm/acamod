@@ -28,9 +28,10 @@ export const moduleUsages = pgTable(
     passed: boolean("passed"),
     note: text("note"),
     targetDate: timestamp("targetDate"),
+    hoursSpent: integer("hoursSpent"),
   },
   (t) => ({
     userModule: uniqueIndex().on(t.userId, t.moduleId),
     userId: index().on(t.userId),
-  })
+  }),
 );

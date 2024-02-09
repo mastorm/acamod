@@ -6,6 +6,7 @@ import { BestAnswerDialog } from "./best-answer-dialog";
 import { Questions, Answers } from "@/lib/schema";
 import { and, eq } from "drizzle-orm";
 import { IsBestAnswerSchema, isBestAnswerSchema } from "./bestAnswerSchema";
+import { urls } from "@/lib/urls";
 
 interface BestAnswerActionProps {
   questionId: number;

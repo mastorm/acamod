@@ -10,7 +10,7 @@ import { PlusCircle } from "lucide-react";
 import { AnswerSchema, answerSchema } from "./answerSchema";
 
 interface CreateNewAnswerActionProps {
-  questionId: string; // Typdefinition für questionId
+  questionId: string;
 }
 export function CreateNewAnswerAction({
   questionId,
@@ -33,7 +33,7 @@ export function CreateNewAnswerAction({
       })
       .returning({ id: Answers.id });
 
-    revalidatePath(`/questions/${questionId}/answers`);
+    revalidatePath(`/questions/${questionId}`);
   }
 
   return (
