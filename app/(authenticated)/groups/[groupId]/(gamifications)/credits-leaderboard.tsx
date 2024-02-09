@@ -18,12 +18,12 @@ export async function CreditsLeaderboard({ groupId }: GamificationOutletProps) {
       credits: sum(modules.credits),
     })
     .from(users)
-    .leftJoin(moduleUsages, eq(users.id, moduleUsages.userId))
+    .leftJoin(modules, and(eq(modules.sharedWithGroup, groupId)))
     .leftJoin(
-      modules,
+      moduleUsages,
       and(
-        eq(modules.sharedWithGroup, groupId),
-        eq(modules.id, moduleUsages.moduleId)
+        eq(users.id, moduleUsages.userId),
+        eq(moduleUsages.moduleId, modules.id)
       )
     )
     .where(eq(moduleUsages.passed, true))
