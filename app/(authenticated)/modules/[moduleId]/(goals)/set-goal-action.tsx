@@ -7,6 +7,7 @@ import { GoalSchema, goalSchema } from "./goalSchema";
 import { format } from "date-fns";
 import { findModuleUsage } from "@/lib/data/moduleUsages";
 import { moduleUsages } from "@/lib/schema";
+import { and, eq } from "drizzle-orm";
 
 interface FileUploadActionProps {
   moduleId: number;
@@ -42,9 +43,17 @@ export async function SetGoalAction({
         userId: session.user.id,
       });
     } else {
-      await db.update(moduleUsages).set({
-        targetDate: new Date(payload.targetDate!),
-      });
+      await db
+        .update(moduleUsages)
+        .set({
+          targetDate: new Date(payload.targetDate!),
+        })
+        .where(
+          and(
+            eq(moduleUsages.moduleId, moduleId),
+            eq(moduleUsages.userId, session.user.id),
+          ),
+        );
     }
 
     revalidatePath(`/modules/${moduleId}`);

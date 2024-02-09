@@ -45,12 +45,20 @@ export async function CompleteModuleAction({
         passed: values.passed,
       });
     } else {
-      await db.update(moduleUsages).set({
-        completedDate: parseISO(values.completedDate),
-        attempts: values.attempts,
-        reachedGrade: values.grade.toString(),
-        passed: values.passed,
-      });
+      await db
+        .update(moduleUsages)
+        .set({
+          completedDate: parseISO(values.completedDate),
+          attempts: values.attempts,
+          reachedGrade: values.grade.toString(),
+          passed: values.passed,
+        })
+        .where(
+          and(
+            eq(moduleUsages.moduleId, moduleId),
+            eq(moduleUsages.userId, session.user.id),
+          ),
+        );
     }
 
     revalidatePath(`/modules/${moduleId}`);
