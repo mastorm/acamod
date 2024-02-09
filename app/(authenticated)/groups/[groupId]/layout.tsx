@@ -20,6 +20,7 @@ import { ModuleTabs } from "../module-tabs";
 import { array } from "zod";
 import { getGroupById, hasAccessToGroup } from "@/lib/data/groups";
 import { LeaveGroupAction } from "./(leave-group)/leave-group-action";
+import { GamificationOutlet } from "./(gamifications)/gamification-outlet";
 
 interface GroupLayoutProps {
   params: {
@@ -51,9 +52,13 @@ export default async function GroupLayout({
         </>
       }
     >
-      <div className="grid gap-2">
-        <ModuleTabs groupId={+currentGroup.id} />
-        {children}
+      <div className="grid gap-6">
+        <GamificationOutlet groupId={+groupId} />
+
+        <div className="grid gap-2">
+          <ModuleTabs groupId={+currentGroup.id} />
+          {children}
+        </div>
       </div>
     </DetailLayout>
   );

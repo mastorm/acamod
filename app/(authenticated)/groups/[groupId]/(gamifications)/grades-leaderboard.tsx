@@ -1,23 +1,22 @@
-import { hasAccessToGroup } from "@/lib/data/groups";
 import { db } from "@/lib/database";
 import { getRequiredSession } from "@/lib/getSession";
 import { moduleUsages, modules, users } from "@/lib/schema";
-import { and, desc, eq, sum } from "drizzle-orm";
-import { Bar, BarChart, ResponsiveContainer } from "recharts";
-import { CreditsLeaderboardChart } from "./credits-leaderboard-chart";
+import { and, avg, eq } from "drizzle-orm";
 import { GamificationCard } from "./gamification-card";
+import { GradesLeaderboardChart } from "./grades-leaderboard-chart";
 interface GamificationOutletProps {
   groupId: number;
 }
 
-export async function CreditsLeaderboard({ groupId }: GamificationOutletProps) {
+export async function GradesLeaderboard({ groupId }: GamificationOutletProps) {
   const session = await getRequiredSession();
   const results = await db
     .select({
       name: users.name,
-      credits: sum(modules.credits),
+      avgGrade: avg(moduleUsages.reachedGrade),
     })
     .from(users)
+
     .leftJoin(modules, and(eq(modules.sharedWithGroup, groupId)))
     .leftJoin(
       moduleUsages,
@@ -28,12 +27,12 @@ export async function CreditsLeaderboard({ groupId }: GamificationOutletProps) {
     )
     .where(eq(moduleUsages.passed, true))
     .groupBy(users.name, users.email)
-    .orderBy(desc(sum(modules.credits)));
+    .orderBy(avg(moduleUsages.reachedGrade));
   return (
-    <GamificationCard name="Leaderboard: Credits">
-      <CreditsLeaderboardChart
+    <GamificationCard name="Leaderboard: Noten">
+      <GradesLeaderboardChart
         data={results.map((x) => ({
-          credits: Number(x.credits),
+          avgGrade: Number(x.avgGrade),
           name: x.name ?? "",
         }))}
       />
