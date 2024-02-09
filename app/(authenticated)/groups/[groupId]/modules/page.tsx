@@ -36,7 +36,6 @@ export default async function GroupModules({
 
   return (
     <div className="flex gap-5 flex-col">
-      <GamificationOutlet groupId={+groupId} />
       <ModuleCollection>
         {userModules.map((x) => (
           <ModuleCard
