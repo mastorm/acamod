@@ -2,11 +2,9 @@ import { db } from "@/lib/database";
 import { getRequiredSession } from "@/lib/getSession";
 import { eq, and } from "drizzle-orm";
 import { notFound } from "next/navigation";
-import { Questions } from "@/lib/schema/questions";
-import { Answers } from "@/lib/schema";
+import { Answers, users, Questions } from "@/lib/schema";
 import React from "react";
 import { CreateNewAnswerAction } from "@/app/(authenticated)/groups/[groupId]/questions/[questionId]/create-new-answer-action";
-import { AnswerCard } from "@/app/(authenticated)/groups/[groupId]/questions/[questionId]/answer-card";
 import { hasAccessToGroup } from "@/lib/data/groups";
 import { CheckCheckIcon } from "lucide-react";
 import { AnswerDivider } from "./answer-divider";
@@ -24,6 +22,8 @@ interface Answer {
   isBestAnswer: boolean | null;
   updatedAt: Date | null;
   createdAt: Date | null;
+  creatorName: string | null;
+  creatorImage: string | null;
 }
 
 const sortAnswers = (answers: Answer[]) => {
@@ -41,8 +41,8 @@ async function questionDetailsPageData(questionId: string) {
     .where(
       and(
         eq(Questions.id, +questionId),
-        hasAccessToGroup(Questions.groupId, session.user.id)
-      )
+        hasAccessToGroup(Questions.groupId, session.user.id),
+      ),
     )
     .leftJoin(Answers, eq(Questions.id, Answers.questionId));
 }
@@ -64,8 +64,19 @@ export default async function QuestionDetailsPage({
   }
 
   let questionAnswers = await db
-    .select()
+    .select({
+      id: Answers.id,
+      questionId: Answers.questionId,
+      content: Answers.content,
+      postedBy: Answers.postedBy,
+      createdAt: Answers.createdAt,
+      isBestAnswer: Answers.isBestAnswer,
+      updatedAt: Answers.updatedAt,
+      creatorName: users.name,
+      creatorImage: users.image,
+    })
     .from(Answers)
+    .leftJoin(users, eq(Answers.postedBy, users.id))
     .where(eq(Answers.questionId, +questionId));
 
   questionAnswers = sortAnswers(questionAnswers);
@@ -76,15 +87,19 @@ export default async function QuestionDetailsPage({
   return (
     <main>
       <div className="pb-4 mt-8 border-b border-gray-400 p-4 ">
-        <div className="flex items-center">
-          <h1 className="text-2xl font-bold break-words mr-2">
-            {currentQuestion.title}
-          </h1>
-          {hasBestAnswer && <CheckCheckIcon className="text-green-500 ml-2" />}{" "}
+        <div className="flex justify-between items-center">
+          <div className="flex items-center">
+            <h1 className="text-2xl font-bold break-words mr-2">
+              {currentQuestion.title}
+            </h1>
+            {hasBestAnswer && <CheckCheckIcon className="text-green-500" />}
+          </div>
+          {!hasBestAnswer && <CreateNewAnswerAction questionId={questionId} />}
         </div>
         <h3 className="text-xl break-words ">{currentQuestion.content}</h3>
       </div>
-      <div className="grid gap-8 grid-cols-1 md:grid-cols-2 xl:grid-cols-4">
+
+      <div className="grid grid-cols-1 overflow-auto mb-8">
         {questionAnswers.map((answer) => (
           <div key={answer.id}>
             <AnswerDivider
@@ -94,9 +109,11 @@ export default async function QuestionDetailsPage({
         ))}
       </div>
 
-      <div className="mb-4">
-        <CreateNewAnswerAction questionId={questionId} />
-      </div>
+      {!hasBestAnswer && (
+        <div className="mb-4">
+          <CreateNewAnswerAction questionId={questionId} />
+        </div>
+      )}
     </main>
   );
 }

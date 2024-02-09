@@ -1,7 +1,6 @@
 import { db } from "@/lib/database";
-import { Answers, Questions } from "@/lib/schema";
+import { Answers, Questions, users } from "@/lib/schema";
 import { eq } from "drizzle-orm";
-
 import { CreateNewQuestionAction } from "../create-new-question-action";
 import { QuestionDivider } from "@/app/(authenticated)/groups/[groupId]/questions/question-divider";
 
@@ -22,14 +21,27 @@ interface Question {
   groupId: number;
   createdAt: Date | null;
   hasBestAnswer: boolean;
+  creatorName: string | null;
+  creatorImage: string | null;
 }
 
 export default async function QuestionsPage({
   params: { groupId },
 }: QuestionsPageProps) {
   const groupQuestions = await db
-    .select()
+    .select({
+      id: Questions.id,
+      title: Questions.title,
+      content: Questions.content,
+      createdBy: Questions.createdBy,
+      groupId: Questions.groupId,
+      createdAt: Questions.createdAt,
+      hasBestAnswer: Questions.hasBestAnswer,
+      creatorName: users.name,
+      creatorImage: users.image,
+    })
     .from(Questions)
+    .leftJoin(users, eq(Questions.createdBy, users.id))
     .where(eq(Questions.groupId, +groupId));
 
   const questionsWithBestAnswers: Question[] = await Promise.all(
@@ -38,6 +50,7 @@ export default async function QuestionsPage({
         .select()
         .from(Answers)
         .where(eq(Answers.questionId, question.id));
+
       const hasBestAnswer = answers.some(
         (answer) => answer.isBestAnswer || false,
       );

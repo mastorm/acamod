@@ -2,6 +2,7 @@ import React from "react";
 import { BestAnswerAction } from "@/app/(authenticated)/groups/[groupId]/questions/[questionId]/best-answer-action";
 import { CheckIcon } from "lucide-react";
 import { ActionButton } from "@/components/layout/action-button";
+import UserAvatar from "@/components/layout/user-avatar";
 
 interface AnswerDividerProps {
   answer: {
@@ -12,14 +13,34 @@ interface AnswerDividerProps {
     isBestAnswer: boolean | null;
     updatedAt: Date | null;
     createdAt: Date | null;
+    creatorName: string | null;
+    creatorImage: string | null;
   };
 }
 
 export function AnswerDivider({
-  answer: { id, content, postedBy, createdAt, questionId, isBestAnswer },
+  answer: {
+    id,
+    content,
+    postedBy,
+    createdAt,
+    questionId,
+    isBestAnswer,
+    creatorName,
+    creatorImage,
+  },
 }: AnswerDividerProps) {
   const answerClass = isBestAnswer ? "bg-green-500/10" : "";
   const iconClass = isBestAnswer ? "text-green-500 hover:bg-green-500/20" : "";
+  const formattedDate = createdAt
+    ? new Date(createdAt).toLocaleDateString("de-DE", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+      })
+    : "Unbekanntes Datum";
   return (
     <div className={`border-b border-gray-400 p-4 ${answerClass}`}>
       <div className="flex items-center">
@@ -34,11 +55,17 @@ export function AnswerDivider({
           </BestAnswerAction>
         </div>
       </div>
-      <div className="text-right text-xs  text-muted-foreground ">
-        Beantwortet am{" "}
-        {createdAt
-          ? createdAt.toLocaleDateString("de-DE")
-          : "Unbekanntes Datum"}
+
+      <div className="flex justify-between items-center mt-2">
+        <div>
+          <div className="text-xs text-muted-foreground">
+            beantwortet am {formattedDate}
+          </div>
+          <div className="text-xs text-muted-foreground">von {creatorName}</div>
+        </div>
+        {creatorImage && (
+          <UserAvatar imageUrl={creatorImage} handle={creatorName} />
+        )}
       </div>
     </div>
   );

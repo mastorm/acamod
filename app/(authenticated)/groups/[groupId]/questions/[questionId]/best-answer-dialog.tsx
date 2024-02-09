@@ -71,25 +71,7 @@ export function BestAnswerDialog({
         </DialogDescription>
         <Form {...form}>
           <form id="form" onSubmit={form.handleSubmit(onSubmit)}>
-            <div className="pt-4">
-              <FormField
-                control={form.control}
-                name="isBestAnswer"
-                render={({ field }) => (
-                  <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow">
-                    <FormControl>
-                      <Checkbox
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
-                    </FormControl>
-                    <div className="space-y-1 leading-none">
-                      <FormLabel>Beantwortet</FormLabel>
-                    </div>
-                  </FormItem>
-                )}
-              />
-            </div>
+            <div className="pt-4"></div>
           </form>
         </Form>
         <DialogFooter>
