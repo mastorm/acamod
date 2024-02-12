@@ -2,7 +2,13 @@ import { db } from "@/lib/database";
 import { getRequiredSession } from "@/lib/getSession";
 import { eq, and } from "drizzle-orm";
 import { notFound } from "next/navigation";
-import { Answers, users, Questions } from "@/lib/schema";
+import {
+  Answers,
+  users,
+  Questions,
+  groupMemberships,
+  groups,
+} from "@/lib/schema";
 import React from "react";
 import { CreateNewAnswerAction } from "@/app/(authenticated)/groups/[groupId]/questions/[questionId]/create-new-answer-action";
 import { hasAccessToGroup } from "@/lib/data/groups";
@@ -12,6 +18,7 @@ import { AnswerDivider } from "./answer-divider";
 interface QuestionDetailsPageProps {
   params: {
     questionId: string;
+    groupId: string;
   };
 }
 interface Answer {
@@ -48,8 +55,31 @@ async function questionDetailsPageData(questionId: string) {
 }
 
 export default async function QuestionDetailsPage({
-  params: { questionId },
+  params: { questionId, groupId },
 }: QuestionDetailsPageProps) {
+  const session = await getRequiredSession();
+  const accessCheck = await db
+    .select({ userId: groupMemberships.userId })
+    .from(groupMemberships)
+    .where(
+      and(
+        eq(groupMemberships.groupId, +groupId),
+        eq(groupMemberships.userId, session.user.id),
+      ),
+    )
+    .union(
+      db
+        .select({ userId: groups.userId })
+        .from(groups)
+        .where(eq(groups.id, +groupId)),
+    )
+    .execute();
+
+  // Wenn der Benutzer keinen Zugang hat, leer oder Fehler zurückgeben
+  if (accessCheck.length === 0) {
+    throw new Error("Kein Zugang zur Gruppe");
+  }
+
   const currentQuestion = await db.query.Questions.findFirst({
     columns: {
       id: true,

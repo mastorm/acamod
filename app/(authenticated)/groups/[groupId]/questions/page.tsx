@@ -1,8 +1,16 @@
 import { db } from "@/lib/database";
-import { Answers, Questions, users } from "@/lib/schema";
-import { eq } from "drizzle-orm";
+import {
+  Answers,
+  Questions,
+  users,
+  groupMemberships,
+  groups,
+} from "@/lib/schema";
+import { and, eq } from "drizzle-orm";
 import { CreateNewQuestionAction } from "../create-new-question-action";
 import { QuestionDivider } from "@/app/(authenticated)/groups/[groupId]/questions/question-divider";
+import { getRequiredSession } from "@/lib/getSession";
+import { hasAccessToGroup } from "@/lib/data/groups";
 
 interface QuestionsPageProps {
   params: {
@@ -28,6 +36,28 @@ interface Question {
 export default async function QuestionsPage({
   params: { groupId },
 }: QuestionsPageProps) {
+  const session = await getRequiredSession();
+  const accessCheck = await db
+    .select({ userId: groupMemberships.userId })
+    .from(groupMemberships)
+    .where(
+      and(
+        eq(groupMemberships.groupId, +groupId),
+        eq(groupMemberships.userId, session.user.id),
+      ),
+    )
+    .union(
+      db
+        .select({ userId: groups.userId })
+        .from(groups)
+        .where(eq(groups.id, +groupId)),
+    )
+    .execute();
+
+  // Wenn der Benutzer keinen Zugang hat, leer oder Fehler zurückgeben
+  if (accessCheck.length === 0) {
+    throw new Error("Kein Zugang zur Gruppe");
+  }
   const groupQuestions = await db
     .select({
       id: Questions.id,

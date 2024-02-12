@@ -13,11 +13,21 @@ interface GroupCardProps {
     id: number;
     name: string;
     outstandingInvite: boolean;
+    questionsCount: number;
+    membersCount: number;
+    answeredQuestionsCount: number;
   };
 }
 
 export function GroupCard({
-  group: { id, name, outstandingInvite },
+  group: {
+    id,
+    name,
+    outstandingInvite,
+    questionsCount,
+    membersCount,
+    answeredQuestionsCount,
+  },
 }: GroupCardProps) {
   return (
     <Link href={urls.groupDetails(id)}>
@@ -33,8 +43,9 @@ export function GroupCard({
         </CardHeader>
         <CardContent>
           <CardDescription>
-            Hier könnten später interessante Infos zu deiner Gruppe zu finden
-            sein. Vorerst dient die Karte nur als link.
+            <p>Fragen: {questionsCount}</p>
+            <p>Beantwortete Fragen: {answeredQuestionsCount}</p>
+            <p>Mitglieder: {membersCount}</p>
           </CardDescription>
         </CardContent>
       </Card>
