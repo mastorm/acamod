@@ -5,6 +5,8 @@ import { db } from "@/lib/database";
 import { and, eq } from "drizzle-orm";
 import { findModuleUsage } from "@/lib/data/moduleUsages";
 import { moduleUsages } from "@/lib/schema";
+import { revalidatePath } from "next/cache";
+import { urls } from "@/lib/urls";
 
 export default async function ModuleNotes({
   params: { moduleId },
@@ -32,6 +34,7 @@ export default async function ModuleNotes({
         .set({ note })
         .where(eq(moduleUsages.moduleId, moduleId));
     }
+    revalidatePath(urls.moduleDetails(moduleId, "notes"));
   }
 
   return (
