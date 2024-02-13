@@ -1,6 +1,7 @@
 import { getGroupById } from "@/lib/data/groups";
 import { CreditsLeaderboard } from "./credits-leaderboard";
 import { GradesLeaderboard } from "./grades-leaderboard";
+import { TimeLeaderboard } from "./time-leaderboard";
 
 interface GamificationOutletProps {
   groupId: number;
@@ -15,6 +16,9 @@ export async function GamificationOutlet({ groupId }: GamificationOutletProps) {
       )}
       {group?.enableBestGradesGamification && (
         <GradesLeaderboard groupId={groupId} />
+      )}
+      {group?.enableTimeSpentGamification && (
+        <TimeLeaderboard groupId={groupId} />
       )}
     </div>
   );

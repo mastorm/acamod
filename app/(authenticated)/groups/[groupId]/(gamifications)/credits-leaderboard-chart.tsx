@@ -30,7 +30,7 @@ export function CreditsLeaderboardChart({
 
         <Tooltip />
         <Legend />
-        <Bar dataKey="credits" fill="#8884d8" />
+        <Bar dataKey="credits" name="Gesammelte Credits" fill="#8884d8" />
       </BarChart>
     </ResponsiveContainer>
   );
