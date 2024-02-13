@@ -6,6 +6,7 @@ import { getRequiredSession } from "@/lib/getSession";
 import { groupMemberships, groups } from "@/lib/schema";
 import { urls } from "@/lib/urls";
 import { and, eq } from "drizzle-orm";
+import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 export async function leaveGroup(fd: FormData) {
@@ -25,5 +26,6 @@ export async function leaveGroup(fd: FormData) {
       )
     );
 
+  revalidatePath(urls.dashboard());
   redirect(urls.dashboard());
 }
