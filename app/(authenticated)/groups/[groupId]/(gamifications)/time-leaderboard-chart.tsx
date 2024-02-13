@@ -3,7 +3,6 @@
 import {
   Bar,
   BarChart,
-  CartesianGrid,
   Legend,
   ResponsiveContainer,
   Tooltip,
@@ -11,14 +10,14 @@ import {
   YAxis,
 } from "recharts";
 
-interface GradesLeaderboardChartProps {
+interface TimeLeaderboardChartProps {
   data: {
     name: string;
-    avgGrade: number;
+    hoursSpent: number;
   }[];
 }
 
-export function GradesLeaderboardChart({ data }: GradesLeaderboardChartProps) {
+export function TimeLeaderboardChart({ data }: TimeLeaderboardChartProps) {
   return (
     <ResponsiveContainer width="100%" height="100%">
       <BarChart data={data}>
@@ -27,7 +26,11 @@ export function GradesLeaderboardChart({ data }: GradesLeaderboardChartProps) {
 
         <Tooltip />
         <Legend />
-        <Bar dataKey="avgGrade" name="Notendurchschnitt" fill="#8884d8" />
+        <Bar
+          dataKey="hoursSpent"
+          name="Verbrachte Zeit (in Std.)"
+          fill="#8884d8"
+        />
       </BarChart>
     </ResponsiveContainer>
   );
