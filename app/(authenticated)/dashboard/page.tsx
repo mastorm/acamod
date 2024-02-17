@@ -7,7 +7,7 @@ import {
   Questions,
   groupMemberships,
 } from "@/lib/schema";
-import { desc, eq, and } from "drizzle-orm";
+import { desc, eq, and, gt, sql, count } from "drizzle-orm";
 import { ModuleCard } from "@/components/shared/modules/module-card";
 import { GroupCard } from "./group-card";
 import { CreateNewGroupAction } from "@/app/(authenticated)/dashboard/create-new-group-action";
@@ -32,21 +32,29 @@ export default async function Page() {
   const enhancedGroups = await Promise.all(
     groups.map(async (group) => {
       const questions = await db
-        .select()
+        .select({
+          countQuestions: sql<number>`count(*)`.as("questions"),
+        })
         .from(Questions)
         .where(eq(Questions.groupId, group.id))
         .execute();
-      const questionsCount = questions.length;
+
+      const questionsCount = Number(questions[0]?.countQuestions || 0);
 
       const members = await db
-        .select()
+        .select({
+          countMembers: sql<number>`count(*)`.as("members"),
+        })
         .from(groupMemberships)
         .where(eq(groupMemberships.groupId, group.id))
         .execute();
-      const membersCount = members.length + 1;
+
+      const membersCount = Number(members[0]?.countMembers || 0) + 1;
 
       const answeredQuestions = await db
-        .select()
+        .select({
+          countAnsweredQuestions: sql<number>`count(*)`.as("answeredQuestions"),
+        })
         .from(Questions)
         .where(
           and(
@@ -55,7 +63,11 @@ export default async function Page() {
           ),
         )
         .execute();
-      const answeredQuestionsCount = answeredQuestions.length;
+
+      const answeredQuestionsCount = Number(
+        answeredQuestions[0]?.countAnsweredQuestions || 0,
+      );
+
       return {
         ...group,
         questionsCount,

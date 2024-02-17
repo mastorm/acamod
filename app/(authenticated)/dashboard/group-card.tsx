@@ -42,11 +42,11 @@ export function GroupCard({
           <CardTitle>{name}</CardTitle>
         </CardHeader>
         <CardContent>
+          <CardDescription>Fragen: {questionsCount}</CardDescription>
           <CardDescription>
-            <p>Fragen: {questionsCount}</p>
-            <p>Beantwortete Fragen: {answeredQuestionsCount}</p>
-            <p>Mitglieder: {membersCount}</p>
+            Beantwortete Fragen: {answeredQuestionsCount}
           </CardDescription>
+          <CardDescription>Mitglieder: {membersCount}</CardDescription>
         </CardContent>
       </Card>
     </Link>
