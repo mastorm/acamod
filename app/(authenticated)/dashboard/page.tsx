@@ -1,8 +1,13 @@
 import { db } from "@/lib/database";
 import { CreateNewModuleAction } from "./create-new-module-action";
 import { getRequiredSession } from "@/lib/getSession";
-import { moduleUsages, modules } from "@/lib/schema";
-import { desc, eq } from "drizzle-orm";
+import {
+  moduleUsages,
+  modules,
+  Questions,
+  groupMemberships,
+} from "@/lib/schema";
+import { desc, eq, and, gt, sql, count } from "drizzle-orm";
 import { ModuleCard } from "@/components/shared/modules/module-card";
 import { GroupCard } from "./group-card";
 import { CreateNewGroupAction } from "@/app/(authenticated)/dashboard/create-new-group-action";
@@ -19,10 +24,59 @@ export default async function Page() {
     .orderBy(
       desc(moduleUsages.completedDate),
       modules.name,
-      desc(moduleUsages.targetDate)
+      desc(moduleUsages.targetDate),
     );
 
   const groups = await getGroupsOfUser(session.user.id);
+
+  const enhancedGroups = await Promise.all(
+    groups.map(async (group) => {
+      const questions = await db
+        .select({
+          countQuestions: sql<number>`count(*)`.as("questions"),
+        })
+        .from(Questions)
+        .where(eq(Questions.groupId, group.id))
+        .execute();
+
+      const questionsCount = Number(questions[0]?.countQuestions || 0);
+
+      const members = await db
+        .select({
+          countMembers: sql<number>`count(*)`.as("members"),
+        })
+        .from(groupMemberships)
+        .where(eq(groupMemberships.groupId, group.id))
+        .execute();
+
+      const membersCount = Number(members[0]?.countMembers || 0) + 1;
+
+      const answeredQuestions = await db
+        .select({
+          countAnsweredQuestions: sql<number>`count(*)`.as("answeredQuestions"),
+        })
+        .from(Questions)
+        .where(
+          and(
+            eq(Questions.groupId, group.id),
+            eq(Questions.hasBestAnswer, true),
+          ),
+        )
+        .execute();
+
+      const answeredQuestionsCount = Number(
+        answeredQuestions[0]?.countAnsweredQuestions || 0,
+      );
+
+      return {
+        ...group,
+        questionsCount,
+        membersCount,
+        answeredQuestionsCount,
+      };
+    }),
+  );
+
   return (
     <main>
       <div className="flex gap-4 pb-6 ">
@@ -46,7 +100,7 @@ export default async function Page() {
       </div>
       {/* TODO: Show list of groups here*/}
       <div className="grid gap-8 grid-cols-1 md:grid-cols-2 xl:grid-cols-4">
-        {groups.map((group) => (
+        {enhancedGroups.map((group) => (
           <GroupCard key={group.id} group={group} />
         ))}
       </div>

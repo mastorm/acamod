@@ -55,6 +55,13 @@ export async function BestAnswerAction({
       .where(eq(Answers.id, answerId))
       .execute();
 
+    // Aktualisieren des hasBestAnswer-Felds der zugehörigen Frage
+    await db
+      .update(Questions)
+      .set({ hasBestAnswer: true })
+      .where(eq(Questions.id, questionId))
+      .execute();
+
     revalidatePath(`/questions/${questionId}`);
   }
   return (
