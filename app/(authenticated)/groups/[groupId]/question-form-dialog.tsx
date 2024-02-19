@@ -77,7 +77,7 @@ export function QuestionFormDialog({
                 name="title"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Fragen Überschrift (*)</FormLabel>
+                    <FormLabel>Überschrift (*)</FormLabel>
                     <FormControl>
                       <Input placeholder="Überschrift der Frage" {...field} />
                     </FormControl>

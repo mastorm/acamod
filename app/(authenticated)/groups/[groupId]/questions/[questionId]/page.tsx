@@ -133,7 +133,11 @@ export default async function QuestionDetailsPage({
         {questionAnswers.map((answer) => (
           <div key={answer.id}>
             <AnswerDivider
-              answer={{ ...answer, isBestAnswer: answer.isBestAnswer ?? false }}
+              answer={{
+                ...answer,
+                isBestAnswer: answer.isBestAnswer ?? false,
+                hasBestAnswer,
+              }}
             />
           </div>
         ))}
