@@ -15,6 +15,7 @@ interface AnswerDividerProps {
     createdAt: Date | null;
     creatorName: string | null;
     creatorImage: string | null;
+    hasBestAnswer: boolean;
   };
 }
 
@@ -28,6 +29,7 @@ export function AnswerDivider({
     isBestAnswer,
     creatorName,
     creatorImage,
+    hasBestAnswer,
   },
 }: AnswerDividerProps) {
   const answerClass = isBestAnswer ? "bg-green-500/10" : "";
@@ -48,11 +50,15 @@ export function AnswerDivider({
           {content}
         </div>
         <div className="flex-initial ml-4">
-          <BestAnswerAction questionId={questionId} answerId={id}>
-            <ActionButton>
-              <CheckIcon className={iconClass} />
-            </ActionButton>
-          </BestAnswerAction>
+          {isBestAnswer ? (
+            <CheckIcon className="text-green-500" />
+          ) : !hasBestAnswer ? (
+            <BestAnswerAction questionId={questionId} answerId={id}>
+              <ActionButton>
+                <CheckIcon />
+              </ActionButton>
+            </BestAnswerAction>
+          ) : null}
         </div>
       </div>
 
