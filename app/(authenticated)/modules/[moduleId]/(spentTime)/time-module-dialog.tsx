@@ -81,7 +81,7 @@ export function TimeSpentDialog({
                   <FormControl>
                     <Input
                       type="number"
-                      step={5}
+                      step={0.25}
                       min={0}
                       max={500}
                       placeholder="150"
