@@ -18,7 +18,11 @@ import { PropsWithChildren } from "react";
 import { EditGroupAction } from "./edit-group-action";
 import { ModuleTabs } from "../module-tabs";
 import { array } from "zod";
-import { getGroupById, hasAccessToGroup } from "@/lib/data/groups";
+import {
+  getGroupById,
+  hasAccessToGroup,
+  isGroupOwner,
+} from "@/lib/data/groups";
 import { LeaveGroupAction } from "./(leave-group)/leave-group-action";
 import { GamificationOutlet } from "./(gamifications)/gamification-outlet";
 
@@ -33,6 +37,7 @@ export default async function GroupLayout({
   params: { groupId },
 }: PropsWithChildren<GroupLayoutProps>) {
   const session = await getRequiredSession();
+  const isOwner = await isGroupOwner(+groupId, session.user.id);
 
   const currentGroup = await getGroupById(+groupId);
 
@@ -47,8 +52,11 @@ export default async function GroupLayout({
       // Untertitel oder andere relevante Informationen können hier hinzugefügt werden
       actions={
         <>
-          <EditGroupAction groupId={currentGroup.id} group={currentGroup} />
-          <LeaveGroupAction groupId={currentGroup.id} />
+          {isOwner ? (
+            <EditGroupAction groupId={currentGroup.id} group={currentGroup} />
+          ) : (
+            <LeaveGroupAction groupId={currentGroup.id} />
+          )}
         </>
       }
     >

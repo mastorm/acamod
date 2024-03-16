@@ -9,13 +9,6 @@ interface LeaveGroupActionProps {
 }
 
 export async function LeaveGroupAction({ groupId }: LeaveGroupActionProps) {
-  const session = await getRequiredSession();
-  const isOwner = await isGroupOwner(groupId, session.user.id);
-
-  if (isOwner) {
-    return null;
-  }
-
   return (
     <LeaveGroupDialog groupId={groupId}>
       <Button variant="ghost">
