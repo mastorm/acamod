@@ -51,6 +51,7 @@ export function EditGroupAction({ group, groupId }: EditGroupActionProps) {
       }}
       defaultValues={group}
       onSave={updateGroup}
+      editGamification={false}
     >
       <ActionButton>
         <SettingsIcon />

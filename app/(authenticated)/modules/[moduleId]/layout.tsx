@@ -37,13 +37,13 @@ export default async function ModuleDetailLayout({
               .where(
                 and(
                   eq(groupMemberships.userId, session.user.id),
-                  eq(groupMemberships.groupId, modules.sharedWithGroup),
-                ),
-              ),
-          ),
+                  eq(groupMemberships.groupId, modules.sharedWithGroup)
+                )
+              )
+          )
         ),
-        eq(modules.id, +moduleId),
-      ),
+        eq(modules.id, +moduleId)
+      )
     )
     .limit(1);
 
@@ -69,14 +69,12 @@ export default async function ModuleDetailLayout({
       }
       actions={
         <>
-          {moduleUsage?.completedDate && (
-            <TimeModuleAction moduleId={currentModule.id}>
-              <ActionButton>
-                {/*complete a module*/}
-                <ClockIcon />
-              </ActionButton>
-            </TimeModuleAction>
-          )}
+          <TimeModuleAction moduleId={currentModule.id}>
+            <ActionButton>
+              {/*complete a module*/}
+              <ClockIcon />
+            </ActionButton>
+          </TimeModuleAction>
           <CompleteModuleAction moduleId={currentModule.id}>
             <ActionButton>
               {/*complete a module*/}

@@ -39,12 +39,14 @@ interface GroupFormDialogProps {
       description: string;
     };
   };
+  editGamification: boolean;
 }
 
 export function GroupFormDialog({
   children,
   onSave,
   defaultValues,
+  editGamification,
   texts,
 }: PropsWithChildren<GroupFormDialogProps>) {
   const [busy, setBusy] = useState(false);
@@ -92,58 +94,62 @@ export function GroupFormDialog({
                 </FormItem>
               )}
             />
-            <span className="pt-2">Gamifications</span>
-            <FormField
-              control={form.control}
-              name="enableBestGradesGamification"
-              render={({ field }) => (
-                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow">
-                  <FormControl>
-                    <Checkbox
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
-                  </FormControl>
-                  <div className="space-y-1 leading-none">
-                    <FormLabel>Gamification: Beste Noten</FormLabel>
-                  </div>
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="enableCreditGamification"
-              render={({ field }) => (
-                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow">
-                  <FormControl>
-                    <Checkbox
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
-                  </FormControl>
-                  <div className="space-y-1 leading-none">
-                    <FormLabel>Gamification: Credits</FormLabel>
-                  </div>
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="enableTimeSpentGamification"
-              render={({ field }) => (
-                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow">
-                  <FormControl>
-                    <Checkbox
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
-                  </FormControl>
-                  <div className="space-y-1 leading-none">
-                    <FormLabel>Gamification: Erfasste Zeit</FormLabel>
-                  </div>
-                </FormItem>
-              )}
-            />
+            {editGamification && (
+              <>
+                <span className="pt-2">Gamifications</span>
+                <FormField
+                  control={form.control}
+                  name="enableBestGradesGamification"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow">
+                      <FormControl>
+                        <Checkbox
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      </FormControl>
+                      <div className="space-y-1 leading-none">
+                        <FormLabel>Gamification: Beste Noten</FormLabel>
+                      </div>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="enableCreditGamification"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow">
+                      <FormControl>
+                        <Checkbox
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      </FormControl>
+                      <div className="space-y-1 leading-none">
+                        <FormLabel>Gamification: Credits</FormLabel>
+                      </div>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="enableTimeSpentGamification"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow">
+                      <FormControl>
+                        <Checkbox
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      </FormControl>
+                      <div className="space-y-1 leading-none">
+                        <FormLabel>Gamification: Erfasste Zeit</FormLabel>
+                      </div>
+                    </FormItem>
+                  )}
+                />
+              </>
+            )}
           </form>
         </Form>
         <DialogFooter>

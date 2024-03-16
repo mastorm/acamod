@@ -50,6 +50,7 @@ export function CreateNewGroupAction() {
           description: "Die Gruppe wurde erfolgreich angelegt",
         },
       }}
+      editGamification={false}
     >
       <Button variant={"ghost"}>
         <PlusCircle className="mr-2 h-4 w-4" />
