@@ -33,12 +33,6 @@ export function GroupCard({
     <Link href={urls.groupDetails(id)}>
       <Card className="hover:bg-accent">
         <CardHeader className="flex gap-2">
-          {outstandingInvite && (
-            <div className="bg-teal-500 rounded-2xl px-2 py-0.5 self-start">
-              Einladung
-            </div>
-          )}
-
           <CardTitle>{name}</CardTitle>
         </CardHeader>
         <CardContent>
