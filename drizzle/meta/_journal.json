@@ -162,6 +162,13 @@
       "when": 1707419714999,
       "tag": "0022_luxuriant_green_goblin",
       "breakpoints": true
+    },
+    {
+      "idx": 23,
+      "version": "5",
+      "when": 1708297198317,
+      "tag": "0023_opposite_leader",
+      "breakpoints": true
     }
   ]
 }

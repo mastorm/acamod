@@ -3,7 +3,7 @@ import { getRequiredSession } from "@/lib/getSession";
 import { revalidatePath } from "next/cache";
 import { db } from "@/lib/database";
 import { TimeSpentDialog } from "./time-module-dialog";
-import { format, parseISO } from "date-fns";
+
 import { moduleUsages, modules } from "@/lib/schema";
 import { and, eq } from "drizzle-orm";
 import { TimeSpentSchemaType, timeSpentSchema } from "./time-module-schema";
@@ -36,13 +36,13 @@ export async function TimeModuleAction({
       await db.insert(moduleUsages).values({
         moduleId: moduleId,
         userId: session.user.id,
-        hoursSpent: values.hoursSpent,
+        hoursSpent: values.hoursSpent.toString(),
       });
     } else {
       await db
         .update(moduleUsages)
         .set({
-          hoursSpent: values.hoursSpent,
+          hoursSpent: values.hoursSpent.toString(),
         })
         .where(
           and(
