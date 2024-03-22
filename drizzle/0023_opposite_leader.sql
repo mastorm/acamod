@@ -1,0 +1,1 @@
+ALTER TABLE "moduleUsages" ALTER COLUMN "hoursSpent" SET DATA TYPE numeric;

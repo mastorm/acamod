@@ -24,7 +24,7 @@ import { PropsWithChildren, useState } from "react";
 import { useForm } from "react-hook-form";
 import { TimeSpentSchemaType, timeSpentSchema } from "./time-module-schema";
 import { Input } from "@/components/ui/input";
-import { CheckCheckIcon } from "lucide-react";
+import { CheckCheckIcon, ClockIcon } from "lucide-react";
 
 interface TimeSpentDialogProps {
   onSave: (values: TimeSpentSchemaType) => Promise<void>;
@@ -96,7 +96,7 @@ export function TimeSpentDialog({
         </Form>
         <DialogFooter>
           <Button disabled={busy} variant="outline" type="submit" form="form">
-            <CheckCheckIcon className="mr-2" />
+            <ClockIcon className="mr-2" />
             Zeit erfassen
           </Button>
         </DialogFooter>
