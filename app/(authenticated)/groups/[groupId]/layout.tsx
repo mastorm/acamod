@@ -53,7 +53,11 @@ export default async function GroupLayout({
       actions={
         <>
           {isOwner ? (
-            <EditGroupAction groupId={currentGroup.id} group={currentGroup} />
+            <EditGroupAction
+              editGamification={isOwner}
+              groupId={currentGroup.id}
+              group={currentGroup}
+            />
           ) : (
             <LeaveGroupAction groupId={currentGroup.id} />
           )}

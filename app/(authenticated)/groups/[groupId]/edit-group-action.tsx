@@ -15,9 +15,14 @@ import { getRequiredSession } from "@/lib/getSession";
 interface EditGroupActionProps {
   groupId: number;
   group: GroupSchema;
+  editGamification: boolean;
 }
 
-export function EditGroupAction({ group, groupId }: EditGroupActionProps) {
+export function EditGroupAction({
+  group,
+  groupId,
+  editGamification,
+}: EditGroupActionProps) {
   async function updateGroup(updatedGroup: GroupSchema) {
     "use server";
 
@@ -51,7 +56,7 @@ export function EditGroupAction({ group, groupId }: EditGroupActionProps) {
       }}
       defaultValues={group}
       onSave={updateGroup}
-      editGamification={false}
+      editGamification={editGamification}
     >
       <ActionButton>
         <SettingsIcon />
